@@ -5,8 +5,8 @@ import {
   Navigate,
 } from "react-router-dom";
 import RouterPaths from "@/render/utils/routes.json";
-import HomePage from "@/render/components/HomePage";
-import Home from "@/render/components/Home";
+import HomePage from "@/render/Pages/HomePage";
+import Home from "@/render/Pages/Home";
 
 const Routes = () => {
   return (
