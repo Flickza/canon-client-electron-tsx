@@ -88,7 +88,7 @@
     "cross-env": "^7.0.3",
     "css-loader": "^6.7.0",
     "dotenv": "^16.0.0",
-    "electron": "17.1.0",
+    "electron": "^17.4.11",
     "electron-icon-builder": "^2.0.1",
     "eslint": "^8.10.0",
     "eslint-import-resolver-typescript": "^2.5.0",
@@ -115,6 +115,7 @@
     "react-dom": "^17.0.2",
     "react-redux": "^7.2.6",
     "react-router-dom": "^6.2.2",
+    "react-viewerjs": "^0.1.9",
     "redux-persist": "^6.0.0"
   }
 }
