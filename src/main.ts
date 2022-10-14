@@ -42,6 +42,7 @@ const createWindow = (): void => {
       contextIsolation: true,
       nodeIntegration: false,
       preload: MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY,
+      sandbox: false,
     },
     // to disable the top bar / frame completely uncomment the next line -
     // if you do this you will have to set up a css class to allow certain parts of your app to be "draggable"

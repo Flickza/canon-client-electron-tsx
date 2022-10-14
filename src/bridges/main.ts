@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-call */
 import {
   ipcRenderer,
   contextBridge,
@@ -31,14 +32,15 @@ export const electronBridge = {
   },
 
   openPath: async (path: string): Promise<string> => {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return await shell.openPath(path);
   },
 };
 
 contextBridge.exposeInMainWorld("electron", electronBridge);
 
-export const storeBridge = createStoreBindings("config"); // "config" = the stores name
+// export const storeBridge = createStoreBindings("config"); // "config" = the stores name
 
-contextBridge.exposeInMainWorld("store", {
-  ...storeBridge,
-});
+// contextBridge.exposeInMainWorld("store", {
+//   ...storeBridge,
+// });
