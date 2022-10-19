@@ -1,13 +1,26 @@
 import React from "react";
-
-const Image = ({ ...props }): JSX.Element => {
+import Viewer from "react-viewer";
+const Image = ({
+  src,
+  viewer,
+  className,
+}: {
+  src: string;
+  viewer: HTMLElement;
+  className: string;
+}): JSX.Element => {
   return (
-    <img
-      {...props}
-      alt="img"
-      width={"100%"}
-      height={"100%"}
-      className="object-contain"
+    <Viewer
+      className={className}
+      visible={true}
+      noClose
+      container={viewer}
+      noNavbar
+      showTotal={false}
+      images={[
+        { src: src, alt: "", },
+      ]}
+      zIndex={1}
     />
   );
 };

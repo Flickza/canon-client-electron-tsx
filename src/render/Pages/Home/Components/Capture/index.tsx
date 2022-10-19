@@ -1,8 +1,32 @@
+import { seriesObject } from "@/render/types";
 import React from "react";
+import { toast } from "react-toastify";
 
-const Capture = () => {
+const Capture = ({
+  setImage,
+  currentSeries,
+}: {
+  setImage: React.Dispatch<React.SetStateAction<string>>;
+  currentSeries: seriesObject;
+}) => {
+  const handleCapture = async () => {
+    if (currentSeries?.fullPath === "") {
+      return toast.warn("Vennligst sett en arkivserie først.", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        theme: "light",
+      });
+    }
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    const image = await window.electron.captureImage(currentSeries.fullPath);
+    setImage(image);
+  };
   return (
-    <button className="btn btn-main border p-2 w-2/4 hover:brightness-125 flex justify-center">
+    <button
+      className="btn btn-main border p-2 w-2/4 hover:brightness-125 rounded-b flex justify-center"
+      onClick={handleCapture}
+    >
       <span>
         <svg
           xmlns="http://www.w3.org/2000/svg"
