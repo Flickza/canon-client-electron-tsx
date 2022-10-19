@@ -1,16 +1,18 @@
-import { seriesObject } from "@/render/types";
+import { prefixData } from "@/render/types";
 import React from "react";
 import { toast } from "react-toastify";
 
 const Capture = ({
   setImage,
-  currentSeries,
+  setShowModal,
+  prefixData,
 }: {
   setImage: React.Dispatch<React.SetStateAction<string>>;
-  currentSeries: seriesObject;
+  setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
+  prefixData: prefixData;
 }) => {
   const handleCapture = async () => {
-    if (currentSeries?.fullPath === "") {
+    if (prefixData?.currentSeries?.fullPath === "") {
       return toast.warn("Vennligst sett en arkivserie først.", {
         position: "top-right",
         autoClose: 3000,
@@ -19,8 +21,11 @@ const Capture = ({
       });
     }
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-    const image = await window.electron.captureImage(currentSeries.fullPath);
+    const image = await window.electron.captureImage(
+      prefixData?.currentSeries?.fullPath
+    );
     setImage(image);
+    setShowModal(true);
   };
   return (
     <button
