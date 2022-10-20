@@ -36,8 +36,8 @@ const createStores = (): void => {
 const createWindow = (): void => {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
-    height: 720,
-    width: 1280,
+    height: 800,
+    width: 1500,
     webPreferences: {
       contextIsolation: true,
       nodeIntegration: false,

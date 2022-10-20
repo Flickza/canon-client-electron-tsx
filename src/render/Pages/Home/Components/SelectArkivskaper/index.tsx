@@ -1,18 +1,18 @@
 import React, { useEffect } from "react";
 import axios, { AxiosResponse } from "axios";
-import { Creator } from "@/render/types";
+import { Arkivskaper, Creator } from "@/render/types";
 import { toast } from "react-toastify";
 
 const SelectArkivskaper = ({
   current,
+  set,
   updateArkivskaper,
   setUpdateArkivskaper,
-  set,
 }: {
-  current: number | undefined;
+  current: Arkivskaper | undefined;
+  set: React.Dispatch<React.SetStateAction<Arkivskaper>>;
   updateArkivskaper: boolean;
   setUpdateArkivskaper: React.Dispatch<React.SetStateAction<boolean>>;
-  set: React.Dispatch<React.SetStateAction<number | undefined | string>>;
 }): JSX.Element => {
   const [Arkivskapere, setArkivskapere] = React.useState<Array<Creator>>();
 
@@ -41,8 +41,11 @@ const SelectArkivskaper = ({
               );
             }
             setArkivskapere(response.data);
-            if (response.data[0].id !== undefined) {
-              set(response.data[0].id);
+            if (response.data[0].id && response.data[0].navn) {
+              set({
+                id: response.data[0].id.toString(),
+                name: response.data[0].navn,
+              });
               setUpdateArkivskaper(false);
             }
           })
@@ -54,9 +57,17 @@ const SelectArkivskaper = ({
     }
   }, [setArkivskapere, updateArkivskaper]);
 
-  const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    console.log(event.target.value);
-    set(event.target.value);
+  const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const index = e.target.selectedIndex;
+    const el = e.target.children[index];
+    const id = el.getAttribute("id");
+    const value = el.getAttribute("value");
+    if (id && value) {
+      set({
+        id: id,
+        name: value,
+      });
+    }
   };
   return (
     <div>
@@ -64,11 +75,16 @@ const SelectArkivskaper = ({
       <select
         className="form-select select-arrow-down focus:select-arrow-up border w-full"
         onChange={handleChange}
-        value={current}
+        value={current?.name}
       >
         {Arkivskapere?.map((a?) => {
           return (
-            <option className="form-select" key={a?.id} value={a?.id}>
+            <option
+              className="form-select"
+              key={a?.id}
+              id={a?.id}
+              value={a?.navn}
+            >
               {a?.navn}
             </option>
           );

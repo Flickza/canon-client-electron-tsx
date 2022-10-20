@@ -1,12 +1,13 @@
+import { Arkivskaper } from "@/render/types";
 import axios, { AxiosResponse } from "axios";
 import React from "react";
 import { toast } from "react-toastify";
 
 const NewProject = ({
-  arkivskaper_id,
+  arkivskaper,
   setUpdateProject,
 }: {
-  arkivskaper_id: number | undefined;
+  arkivskaper: Arkivskaper | undefined;
   setUpdateProject: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
   const [input, setInput] = React.useState("");
@@ -16,12 +17,12 @@ const NewProject = ({
   };
 
   const createProject = async () => {
-    if (input.length > 0 && arkivskaper_id !== undefined) {
+    if (input.length > 0 && arkivskaper?.id !== undefined) {
       await toast
         .promise(
           axios({
             method: "post",
-            url: `http://10.170.8.154:7373/project/${arkivskaper_id}/${input}`,
+            url: `http://10.170.8.154:7373/project/${arkivskaper?.id}/${input}`,
           }),
           {
             pending: `Opretter nytt prosjekt: ${input}.`,
@@ -35,8 +36,7 @@ const NewProject = ({
           }
         )
         .then(() => {
-          if (arkivskaper_id !== undefined) {
-            console.log(arkivskaper_id);
+          if (arkivskaper.id !== "") {
             setInput("");
             setUpdateProject(true);
           }
@@ -53,12 +53,12 @@ const NewProject = ({
           className="form-control border w-5/6"
           value={input}
           onChange={handleChange}
-          disabled={arkivskaper_id === undefined}
+          disabled={arkivskaper?.id === undefined}
         />
         <button
           className="btn btn-main border w-1/6"
           onClick={createProject}
-          disabled={arkivskaper_id === undefined}
+          disabled={arkivskaper?.id === undefined}
         >
           <span className="flex justify-center">
             <svg

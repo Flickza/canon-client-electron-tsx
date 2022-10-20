@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Image from "./Components/Image";
 import NewArkivskaper from "./Components/NewArkivskaper";
 import NewProject from "./Components/NewProject";
@@ -9,27 +9,39 @@ import first_image from "../../../../assets/image/video-slash.png";
 import Capture from "./Components/Capture";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { seriesObject } from "@/render/types";
+import { Arkivskaper, seriesObject } from "@/render/types";
 import Save from "./Components/Save";
 import "./index.css";
 
 const Home = () => {
   const [currentImage, setImage] = React.useState(first_image);
   const [currentProject, setProject] = React.useState<string | undefined>();
-  const [currentArkivskaper, setArkivskaper] = React.useState<
-    number | undefined
-  >();
+  const [currentArkivskaper, setArkivskaper] = React.useState<Arkivskaper>();
   const [currentSeries, setSeries] = React.useState<seriesObject>({
     fullPath: "",
     folderPath: "",
+    last_image_index: 0,
   });
   const [updateArkivskaper, setUpdateArkivskaper] =
     React.useState<boolean>(false);
   const [updateProject, setUpdateProject] = React.useState<boolean>(false);
   const [showModal, setShowModal] = React.useState(false);
+  const [prefix, setPrefix] = React.useState<string | undefined>();
 
-  console.log("Rendered!");
-
+  useEffect(() => {
+    if (currentArkivskaper?.name && currentProject) {
+      // get current date
+      const date = new Date();
+      // make a date string that looks like day-month-year
+      const dateString = `${date.getDate()}-${
+        date.getMonth() + 1
+      }-${date.getUTCFullYear()}`;
+      // create a prefix with [arkivskaper name]_[currentProject]_[dateString]
+      setPrefix(`${currentArkivskaper.name}_${currentProject}_${dateString}`);
+    } else {
+      setPrefix(undefined);
+    }
+  }, [currentProject, currentArkivskaper]);
   return (
     <>
       <ToastContainer />
@@ -42,34 +54,33 @@ const Home = () => {
             <div className="grid-rows-7 lg:mr-16 lg:ml-16 xs:mr-5 xs:ml-5 mt-36">
               <div className="row-span-1 mt-5 flex justify-center">
                 <Save
+                  setImage={setImage}
                   showModal={showModal}
                   setShowModal={setShowModal}
-                  path={currentSeries.folderPath}
+                  path={currentSeries}
+                  prefix={prefix}
                 />
               </div>
               <div className="row-span-1">
-                <NewArkivskaper
-                  setUpdateArkivskaper={setUpdateArkivskaper}
-                  setArkivskaper={setArkivskaper}
-                />
+                <NewArkivskaper setUpdateArkivskaper={setUpdateArkivskaper} />
               </div>
               <div className="row-span-1 mt-10">
                 <SelectArkivskaper
                   current={currentArkivskaper}
+                  set={setArkivskaper}
                   updateArkivskaper={updateArkivskaper}
                   setUpdateArkivskaper={setUpdateArkivskaper}
-                  set={setArkivskaper}
                 />
               </div>
               <div className="row-span-1 mt-5">
                 <NewProject
-                  arkivskaper_id={currentArkivskaper}
+                  arkivskaper={currentArkivskaper}
                   setUpdateProject={setUpdateProject}
                 />
               </div>
               <div className="row-span-1 mt-5">
                 <SelectProject
-                  arkivskaper_id={currentArkivskaper}
+                  arkivskaper={currentArkivskaper}
                   current={currentProject}
                   set={setProject}
                   setUpdateProject={setUpdateProject}
@@ -82,12 +93,10 @@ const Home = () => {
               <div className="row-span-1 mt-5 flex justify-center">
                 <Capture
                   setImage={setImage}
+                  currentImage={currentImage}
                   setShowModal={setShowModal}
-                  prefixData={{
-                    currentSeries,
-                    currentArkivskaper,
-                    currentProject,
-                  }}
+                  currentSeries={currentSeries}
+                  prefix={prefix}
                 />
               </div>
             </div>

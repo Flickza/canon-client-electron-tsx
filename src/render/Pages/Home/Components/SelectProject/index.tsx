@@ -1,17 +1,18 @@
-import { Project } from "@/render/types";
+import { Arkivskaper, Project } from "@/render/types";
 import axios, { AxiosResponse } from "axios";
 import React, { useEffect } from "react";
+import { toast } from "react-toastify";
 
 const SelectProject = ({
-  arkivskaper_id,
+  arkivskaper,
   current,
   set,
   setUpdateProject,
   updateProject,
 }: {
-  arkivskaper_id: number | string | undefined;
+  arkivskaper: Arkivskaper | undefined;
   current: string | undefined;
-  set: React.Dispatch<React.SetStateAction<string>>;
+  set: React.Dispatch<React.SetStateAction<string | undefined>>;
   setUpdateProject: React.Dispatch<React.SetStateAction<boolean>>;
   updateProject: boolean;
 }) => {
@@ -19,17 +20,37 @@ const SelectProject = ({
 
   useEffect(() => {
     const fetchData = async () => {
-      if (arkivskaper_id !== undefined) {
+      if (arkivskaper?.id) {
         await axios({
           method: "get",
-          url: `http://10.170.8.154:7373/project/get/${arkivskaper_id}`,
+          url: `http://10.170.8.154:7373/project/get/${arkivskaper.id}`,
           responseType: "json",
         })
           .then((response: AxiosResponse<Array<Project>>) => {
             if (updateProject === true) {
               setUpdateProject(false);
             }
-            setProjects(response.data);
+            if (response.data) {
+              setProjects(response.data);
+              if (response?.data[0]?.navn && response?.data[0]?.id) {
+                set(response?.data[0].navn);
+              } else {
+                set(undefined);
+                return toast.warn(
+                  "Det finnes ingen prosjekter på denne arkivskaperen enda. Legg til en ny?",
+                  {
+                    position: "top-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: false,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "light",
+                  }
+                );
+              }
+            }
           })
           .catch((err) => console.error(err));
       }
@@ -38,7 +59,7 @@ const SelectProject = ({
     fetchData().catch((err) => {
       throw err;
     });
-  }, [arkivskaper_id, updateProject]);
+  }, [arkivskaper, updateProject]);
 
   const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     set(event.target.value);
@@ -50,7 +71,7 @@ const SelectProject = ({
         className="form-select select-arrow-down border w-full"
         onChange={handleChange}
         value={current}
-        disabled={arkivskaper_id === undefined}
+        disabled={arkivskaper?.id === undefined}
       >
         {projects?.map((a?) => {
           return (

@@ -4,10 +4,8 @@ import { toast } from "react-toastify";
 
 const NewArkivskaper = ({
   setUpdateArkivskaper,
-  setArkivskaper,
 }: {
   setUpdateArkivskaper: React.Dispatch<React.SetStateAction<boolean>>;
-  setArkivskaper: React.Dispatch<React.SetStateAction<number | undefined>>;
 }) => {
   const [input, setInput] = React.useState("");
 

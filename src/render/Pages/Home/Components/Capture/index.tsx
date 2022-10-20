@@ -1,19 +1,26 @@
-import { prefixData } from "@/render/types";
+import { seriesObject } from "@/render/types";
 import React from "react";
 import { toast } from "react-toastify";
 
 const Capture = ({
   setImage,
+  currentImage,
   setShowModal,
-  prefixData,
+  currentSeries,
+  prefix,
 }: {
   setImage: React.Dispatch<React.SetStateAction<string>>;
+  currentImage: string;
   setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
-  prefixData: prefixData;
+  currentSeries: seriesObject;
+  prefix: string | undefined;
 }) => {
+  // handle capture button click
   const handleCapture = async () => {
-    if (prefixData?.currentSeries?.fullPath === "") {
-      return toast.warn("Vennligst sett en arkivserie først.", {
+    // check if path is not set
+    if (currentSeries?.fullPath === "" || !prefix) {
+      // Send warning notification if not set
+      return toast.warn("Mangler arkivskaper, prosjekt eller arkivsere.", {
         position: "top-right",
         autoClose: 3000,
         hideProgressBar: false,
@@ -21,11 +28,15 @@ const Capture = ({
       });
     }
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-    const image = await window.electron.captureImage(
-      prefixData?.currentSeries?.fullPath
-    );
-    setImage(image);
-    setShowModal(true);
+    if (currentSeries.fullPath) {
+      // check if path is set
+      const image = await window.electron.captureImage(currentSeries.fullPath); // send signal to capture image to path
+      if (currentImage !== image) {
+        //check if image is not already set
+        setImage(image); // set image captured
+      }
+      setShowModal(true); // show save yes/no notification
+    }
   };
   return (
     <button

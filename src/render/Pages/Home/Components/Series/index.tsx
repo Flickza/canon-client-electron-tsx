@@ -9,13 +9,19 @@ const Series = ({
   current: seriesObject;
   set: React.Dispatch<React.SetStateAction<seriesObject>>;
 }) => {
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const openPath = async () => {
     const path: dirObject = await window.electron.choosePath();
     if (!path.canceled) {
       const fullPath = path?.filePaths[0];
       const folder = fullPath.split("\\").at(-1);
       if (folder) {
-        set({ fullPath: fullPath, folderPath: folder });
+        set({ fullPath: fullPath, folderPath: folder, last_image_index: path.last_image_index });
+        return toast.success(`Ok. ${fullPath}`, {
+          position: "top-right",
+          autoClose: 2000,
+          theme: "light",
+        });
       }
     } else {
       return toast.success("Kansellert.", {
@@ -33,7 +39,6 @@ const Series = ({
           type="text"
           className="form-control border w-5/6"
           placeholder={current.folderPath}
-          disabled
         />
         <button className="btn btn-main border w-1/6" onClick={openPath}>
           <span className="flex justify-center">
