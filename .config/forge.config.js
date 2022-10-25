@@ -29,10 +29,9 @@ module.exports = {
       config: {
         // https://js.electronforge.io/maker/squirrel/interfaces/makersquirrelconfig
         setupExe: "Windows Setup.exe",
-        iconUrl:
-          "https://raw.githubusercontent.com/saucesteals/electron-typescript-react-tailwind-redux/main/assets/package/icons/win/icon.ico",
+        iconUrl: path.join(packageAssetsPath, "icons", "win", "icon.ico"),
         setupIcon: path.join(packageAssetsPath, "icons", "win", "icon.ico"),
-        authors: "saucesteals & fourwadu",
+        authors: "Arkiv i Nordland",
         loadingGif: path.join(packageAssetsPath, "loading.gif"),
       },
     },
@@ -64,12 +63,11 @@ module.exports = {
     },
   ],
   plugins: [
-    [
-      "@electron-forge/plugin-webpack",
-      {
+    {
+      name: "@electron-forge/plugin-webpack",
+      config: {
         mainConfig: "./.config/webpack.main.config.js",
-        devContentSecurityPolicy:
-          "connect-src * 'unsafe-inline';",
+        devContentSecurityPolicy: "connect-src * 'unsafe-inline';",
         renderer: {
           config: "./.config/webpack.renderer.config.js",
           entryPoints: [
@@ -84,6 +82,6 @@ module.exports = {
           ],
         },
       },
-    ],
+    },
   ],
 };
