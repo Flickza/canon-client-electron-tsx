@@ -1,4 +1,3 @@
-import { seriesObject } from "@/render/types";
 import React from "react";
 import { toast } from "react-toastify";
 
@@ -12,7 +11,7 @@ const Capture = ({
   setImage: React.Dispatch<React.SetStateAction<string>>;
   currentImage: string;
   setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
-  currentSeries: seriesObject;
+  currentSeries: folderObject;
   prefix: string | undefined;
 }) => {
   // handle capture button click

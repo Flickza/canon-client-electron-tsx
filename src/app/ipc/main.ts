@@ -1,4 +1,3 @@
-import { dirObject, seriesObject } from "@/render/types";
 import axios, { AxiosResponse } from "axios";
 import { app, BrowserWindow, ipcMain, dialog } from "electron";
 import fs, { createWriteStream } from "fs";
@@ -94,7 +93,7 @@ ipcMain.handle("capture-image", async (_e, p: string): Promise<string> => {
 
 ipcMain.handle(
   "save-image",
-  (_e, p: seriesObject, prefix: string): Promise<string> => {
+  (_e, p: folderObject, prefix: string): Promise<string> => {
     return new Promise(async (resolve, reject) => {
       if (p.fullPath) {
         const index = await getIndex(p?.fullPath);
@@ -118,7 +117,7 @@ ipcMain.handle(
     });
   }
 );
-ipcMain.handle("delete-temp", (_e, p: seriesObject): Promise<string> => {
+ipcMain.handle("delete-temp", (_e, p: folderObject): Promise<string> => {
   return new Promise((resolve, reject) => {
     if (p.fullPath) {
       const temp = path.join(p.fullPath, TEMP_FILE);

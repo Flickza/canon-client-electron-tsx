@@ -21,5 +21,5 @@
       "@redux/*": ["./src/render/redux/*"]
     }
   },
-  "include": ["src/**/*", "assets/**/*"]
+  "include": ["src/**/*", "assets/**/*", "src/render/types/index.d.ts"]
 }

@@ -1,3 +1,4 @@
+import { apiRequest } from "@/render/utils/api";
 import axios, { AxiosResponse } from "axios";
 import React from "react";
 import { toast } from "react-toastify";
@@ -16,22 +17,16 @@ const NewArkivskaper = ({
   const createCreator = async () => {
     if (input.length > 0) {
       await toast
-        .promise(
-          axios({
-            method: "post",
-            url: `http://10.170.8.154:7373/creator/${input}`,
-          }),
-          {
-            pending: `Opretter ny arkivskaper: ${input}.`,
-            success: `Opretting av arkivskaper: ${input} fullført.`,
-            error: {
-              render({ data }: AxiosResponse) {
-                // eslint-disable-next-line @typescript-eslint/restrict-template-expressions, @typescript-eslint/no-unsafe-member-access
-                return `Noe gikk galt, prøv igjen senere. \n ${data?.response?.data?.code}`;
-              },
+        .promise(apiRequest("post", "/creator/${input}"), {
+          pending: `Opretter ny arkivskaper: ${input}.`,
+          success: `Opretting av arkivskaper: ${input} fullført.`,
+          error: {
+            render({ data }: AxiosResponse) {
+              // eslint-disable-next-line @typescript-eslint/restrict-template-expressions, @typescript-eslint/no-unsafe-member-access
+              return `Noe gikk galt, prøv igjen senere. \n ${data?.response?.data?.code}`;
             },
-          }
-        )
+          },
+        })
         .then((data: AxiosResponse<{ insertId: number }>) => {
           if (data?.data?.insertId) {
             setInput("");

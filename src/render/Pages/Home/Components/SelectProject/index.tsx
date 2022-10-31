@@ -1,4 +1,4 @@
-import { Arkivskaper, Project } from "@/render/types";
+import { apiRequest } from "@/render/utils/api";
 import axios, { AxiosResponse } from "axios";
 import React, { useEffect } from "react";
 import { toast } from "react-toastify";
@@ -11,8 +11,8 @@ const SelectProject = ({
   updateProject,
 }: {
   arkivskaper: Arkivskaper | undefined;
-  current: string | undefined;
-  set: React.Dispatch<React.SetStateAction<string | undefined>>;
+  current: Project | undefined;
+  set: React.Dispatch<React.SetStateAction<Project | undefined>>;
   setUpdateProject: React.Dispatch<React.SetStateAction<boolean>>;
   updateProject: boolean;
 }) => {
@@ -21,11 +21,7 @@ const SelectProject = ({
   useEffect(() => {
     const fetchData = async () => {
       if (arkivskaper?.id) {
-        await axios({
-          method: "get",
-          url: `http://10.170.8.154:7373/project/get/${arkivskaper.id}`,
-          responseType: "json",
-        })
+        await apiRequest("get", `/project/get/${arkivskaper.id}`)
           .then((response: AxiosResponse<Array<Project>>) => {
             if (updateProject === true) {
               setUpdateProject(false);
@@ -33,7 +29,10 @@ const SelectProject = ({
             if (response.data) {
               setProjects(response.data);
               if (response?.data[0]?.navn && response?.data[0]?.id) {
-                set(response?.data[0].navn);
+                set({
+                  id: response.data[0].id,
+                  navn: response.data[0].navn,
+                });
               } else {
                 set(undefined);
                 return toast.warn(
@@ -61,8 +60,17 @@ const SelectProject = ({
     });
   }, [arkivskaper, updateProject]);
 
-  const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    set(event.target.value);
+  const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const index = e.target.selectedIndex;
+    const el = e.target.children[index];
+    const id = el.getAttribute("id");
+    const value = el.getAttribute("value");
+    if (id && value) {
+      set({
+        id: Number(id),
+        navn: value,
+      });
+    }
   };
   return (
     <div>
@@ -70,7 +78,7 @@ const SelectProject = ({
       <select
         className="form-select select-arrow-down border w-full"
         onChange={handleChange}
-        value={current}
+        value={current?.navn}
         disabled={arkivskaper?.id === undefined}
       >
         {projects?.map((a?) => {

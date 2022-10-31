@@ -1,4 +1,3 @@
-import { seriesObject } from "@/render/types";
 import { toast, ToastContentProps } from "react-toastify";
 import first_image from "../../../../../../assets/image/video-slash.png";
 
@@ -9,7 +8,7 @@ const SaveToast = ({
   setImage,
 }: {
   closeToast?: ToastContentProps["closeToast"];
-  path?: seriesObject;
+  path?: folderObject;
   prefix?: string;
   setImage: React.Dispatch<React.SetStateAction<string>>;
 }): JSX.Element => {
@@ -17,7 +16,7 @@ const SaveToast = ({
   const yesOption: any = async (
     closeToast: ToastContentProps["closeToast"],
     prefix: string,
-    path: seriesObject
+    path: folderObject
   ) => {
     if (path && prefix) {
       await toast
@@ -47,7 +46,7 @@ const SaveToast = ({
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const noOption: any = async (
     closeToast: ToastContentProps["closeToast"],
-    path: seriesObject
+    path: folderObject
   ) => {
     if (path) {
       await toast

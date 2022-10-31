@@ -1,6 +1,4 @@
-import { seriesObject } from '@/render/types';
 /* eslint-disable @typescript-eslint/no-unsafe-call */
-import { dirObject } from "@/render/types";
 import {
   ipcRenderer,
   contextBridge,
@@ -46,12 +44,12 @@ export const electronBridge = {
     const result: string = await ipcRenderer.invoke("capture-image", p);
     return result;
   },
-  saveImage: async (path: seriesObject, prefix: string): Promise<string> => {
+  saveImage: async (path: folderObject, prefix: string): Promise<string> => {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const result: string = await ipcRenderer.invoke("save-image", path, prefix);
     return result;
   },
-  deleteImage: async (path: seriesObject): Promise<string> => {
+  deleteImage: async (path: folderObject): Promise<string> => {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const result: string = await ipcRenderer.invoke("delete-temp", path);
     return result;

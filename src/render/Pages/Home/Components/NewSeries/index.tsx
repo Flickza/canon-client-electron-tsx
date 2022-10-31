@@ -3,12 +3,14 @@ import axios, { AxiosResponse } from "axios";
 import React from "react";
 import { toast } from "react-toastify";
 
-const NewProject = ({
+const NewSeries = ({
   arkivskaper,
-  setUpdateProject,
+  project,
+  setUpdateSeries,
 }: {
   arkivskaper: Arkivskaper | undefined;
-  setUpdateProject: React.Dispatch<React.SetStateAction<boolean>>;
+  project: Project | undefined;
+  setUpdateSeries: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
   const [input, setInput] = React.useState("");
 
@@ -16,23 +18,34 @@ const NewProject = ({
     setInput(event.target.value.replace(/[^a-zA-Z 0-9_-]/g, ""));
   };
 
-  const createProject = async () => {
-    if (input.length > 0 && arkivskaper?.id !== undefined) {
+  const createSeries = async () => {
+    if (
+      input.length > 0 &&
+      arkivskaper?.id !== undefined &&
+      project?.id !== undefined
+    ) {
+      console.log(`/arkivserie/${arkivskaper?.id}/${project?.id}/${input}`);
       await toast
-        .promise(apiRequest("post", `/project/${arkivskaper?.id}/${input}`), {
-          pending: `Opretter nytt prosjekt: ${input}.`,
-          success: `Opretting av prosjekt: ${input} fullført.`,
-          error: {
-            render({ data }: AxiosResponse) {
-              // eslint-disable-next-line @typescript-eslint/restrict-template-expressions, @typescript-eslint/no-unsafe-member-access
-              return `Noe gikk galt, prøv igjen senere. \n ${data?.response?.data?.code}`;
+        .promise(
+          apiRequest(
+            "post",
+            `/arkivserie/${arkivskaper?.id}/${project?.id}/${input}`
+          ),
+          {
+            pending: `Opretter ny arkivserie: ${input}.`,
+            success: `Opretting av arkivserie: ${input} fullført.`,
+            error: {
+              render({ data }: AxiosResponse) {
+                // eslint-disable-next-line @typescript-eslint/restrict-template-expressions, @typescript-eslint/no-unsafe-member-access
+                return `Noe gikk galt, prøv igjen senere. \n ${data?.response?.data?.code}`;
+              },
             },
-          },
-        })
+          }
+        )
         .then(() => {
-          if (arkivskaper.id !== "") {
+          if (arkivskaper.id !== "" && project.id !== undefined) {
             setInput("");
-            setUpdateProject(true);
+            setUpdateSeries(true);
           }
         });
     }
@@ -40,7 +53,7 @@ const NewProject = ({
 
   return (
     <div>
-      <p>Nytt prosjekt:</p>
+      <p>Ny Arkivserie:</p>
       <span className="flex gap-3">
         <input
           type="text"
@@ -51,7 +64,7 @@ const NewProject = ({
         />
         <button
           className="btn btn-main border w-1/6"
-          onClick={createProject}
+          onClick={createSeries}
           disabled={arkivskaper?.id === undefined}
         >
           <span className="flex justify-center">
@@ -76,4 +89,4 @@ const NewProject = ({
   );
 };
 
-export default NewProject;
+export default NewSeries;

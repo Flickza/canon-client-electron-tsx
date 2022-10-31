@@ -1,13 +1,12 @@
-import { dirObject, seriesObject } from "@/render/types";
 import React from "react";
 import { toast } from "react-toastify";
 
-const Series = ({
+const FolderName = ({
   current,
   set,
 }: {
-  current: seriesObject;
-  set: React.Dispatch<React.SetStateAction<seriesObject>>;
+  current: folderObject;
+  set: React.Dispatch<React.SetStateAction<folderObject>>;
 }) => {
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const openPath = async () => {
@@ -33,7 +32,7 @@ const Series = ({
   };
   return (
     <div>
-      <p>Arkivserie:</p>
+      <p>Mappe navn:</p>
       <span className="flex gap-3">
         <input
           type="text"
@@ -63,4 +62,4 @@ const Series = ({
   );
 };
 
-export default Series;
+export default FolderName;

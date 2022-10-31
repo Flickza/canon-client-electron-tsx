@@ -39,7 +39,7 @@ const createWindow = (): void => {
   const mainWindow = new BrowserWindow({
     height: 800,
     width: 1500,
-    icon: path.join(__dirname, "../"),
+    icon: path.join(__dirname, "assets", "package", "icons", "win", "icon.ico"),
     webPreferences: {
       contextIsolation: true,
       nodeIntegration: false,
@@ -47,11 +47,14 @@ const createWindow = (): void => {
       preload: MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY,
       sandbox: false,
     },
+    autoHideMenuBar: true,
+
     // to disable the top bar / frame completely uncomment the next line -
     // if you do this you will have to set up a css class to allow certain parts of your app to be "draggable"
 
     // frame: false
   });
+
 
   // and load the index.html of the app.
   mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY);
@@ -60,6 +63,9 @@ const createWindow = (): void => {
   if (isDev) {
     mainWindow.webContents.openDevTools();
   }
+  console.log(
+    path.join(__dirname, "assets", "package", "icons", "win", "icon.ico")
+  );
 };
 
 // This method will be called when Electron has finished

@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import axios, { AxiosResponse } from "axios";
-import { Arkivskaper, Creator } from "@/render/types";
 import { toast } from "react-toastify";
+import { apiRequest } from "@/render/utils/api";
 
 const SelectArkivskaper = ({
   current,
@@ -19,11 +19,7 @@ const SelectArkivskaper = ({
   useEffect(() => {
     if (current === undefined || updateArkivskaper === true) {
       const fetchData = async () => {
-        await axios({
-          method: "get",
-          url: `http://10.170.8.154:7373/creator/get`,
-          responseType: "json",
-        })
+        await apiRequest("get", "/creator/get")
           .then((response: AxiosResponse<Array<Creator>>) => {
             if (response.data.length === 0) {
               return toast.warn(

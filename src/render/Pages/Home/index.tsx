@@ -4,32 +4,38 @@ import NewArkivskaper from "./Components/NewArkivskaper";
 import NewProject from "./Components/NewProject";
 import SelectArkivskaper from "./Components/SelectArkivskaper";
 import SelectProject from "./Components/SelectProject";
-import Series from "./Components/Series";
 import first_image from "../../../../assets/image/video-slash.png";
 import Capture from "./Components/Capture";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { Arkivskaper, seriesObject } from "@/render/types";
 import Save from "./Components/Save";
 import "./index.css";
+import FolderName from "./Components/FolderName";
+import SelectSeries from "./Components/SelectSeries";
+import NewSeries from "./Components/NewSeries";
 
 const Home = () => {
   const [currentImage, setImage] = React.useState(first_image);
-  const [currentProject, setProject] = React.useState<string | undefined>();
+  const [currentProject, setProject] = React.useState<Project | undefined>();
   const [currentArkivskaper, setArkivskaper] = React.useState<Arkivskaper>();
-  const [currentSeries, setSeries] = React.useState<seriesObject>({
+
+  const [currentSeries, setSeries] = React.useState<Series | undefined>();
+  const [currentFolder, setFolder] = React.useState<folderObject>({
     fullPath: "",
     folderPath: "",
     last_image_index: 0,
   });
+
   const [updateArkivskaper, setUpdateArkivskaper] =
     React.useState<boolean>(false);
   const [updateProject, setUpdateProject] = React.useState<boolean>(false);
+  const [updateSeries, setUpdateSeries] = React.useState<boolean>(false);
+
   const [showModal, setShowModal] = React.useState(false);
   const [prefix, setPrefix] = React.useState<string | undefined>();
 
   useEffect(() => {
-    if (currentArkivskaper?.name && currentProject) {
+    if (currentArkivskaper?.name && currentProject?.navn) {
       // get current date
       const date = new Date();
       // make a date string that looks like day-month-year
@@ -37,7 +43,9 @@ const Home = () => {
         date.getMonth() + 1
       }-${date.getUTCFullYear()}`;
       // create a prefix with [arkivskaper name]_[currentProject]_[dateString]
-      setPrefix(`${currentArkivskaper.name}_${currentProject}_${dateString}`);
+      setPrefix(
+        `${currentArkivskaper.name}_${currentProject.navn}_${dateString}`
+      );
     } else {
       setPrefix(undefined);
     }
@@ -57,7 +65,7 @@ const Home = () => {
                   setImage={setImage}
                   showModal={showModal}
                   setShowModal={setShowModal}
-                  path={currentSeries}
+                  path={currentFolder}
                   prefix={prefix}
                 />
               </div>
@@ -88,14 +96,31 @@ const Home = () => {
                 />
               </div>
               <div className="row-span-1 mt-5">
-                <Series current={currentSeries} set={setSeries} />
+                <NewSeries
+                  setUpdateSeries={setUpdateSeries}
+                  arkivskaper={currentArkivskaper}
+                  project={currentProject}
+                />
+              </div>
+              <div className="row-span-1 mt-5">
+                <SelectSeries
+                  arkivskaper={currentArkivskaper}
+                  project={currentProject}
+                  current={currentSeries}
+                  set={setSeries}
+                  setUpdateSeries={setUpdateSeries}
+                  updateSeries={updateSeries}
+                />
+              </div>
+              <div className="row-span-1 mt-5">
+                <FolderName current={currentFolder} set={setFolder} />
               </div>
               <div className="row-span-1 mt-5 flex justify-center">
                 <Capture
                   setImage={setImage}
                   currentImage={currentImage}
                   setShowModal={setShowModal}
-                  currentSeries={currentSeries}
+                  currentSeries={currentFolder}
                   prefix={prefix}
                 />
               </div>

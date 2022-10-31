@@ -1,4 +1,3 @@
-import { seriesObject } from "@/render/types";
 import React, { useEffect } from "react";
 import { toast } from "react-toastify";
 import SaveToast from "./SaveToast";
@@ -12,14 +11,14 @@ const Save = ({
 }: {
   showModal: boolean;
   setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
-  path: seriesObject;
+  path: folderObject;
   prefix: string | undefined;
   setImage: React.Dispatch<React.SetStateAction<string>>;
 }) => {
   const showSaveOptions = (
     showModal: boolean,
     setShowModal: React.Dispatch<React.SetStateAction<boolean>>,
-    path: seriesObject,
+    path: folderObject,
     prefix: string | undefined
   ) => {
     {
