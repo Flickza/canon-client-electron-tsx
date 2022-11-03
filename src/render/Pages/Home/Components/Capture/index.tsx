@@ -5,21 +5,34 @@ const Capture = ({
   setImage,
   currentImage,
   setShowModal,
+  currentFolder,
   currentSeries,
   prefix,
 }: {
   setImage: React.Dispatch<React.SetStateAction<string>>;
   currentImage: string;
   setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
-  currentSeries: folderObject;
+  currentFolder: folderObject;
+  currentSeries: Series | undefined;
   prefix: string | undefined;
 }) => {
   // handle capture button click
   const handleCapture = async () => {
     // check if path is not set
-    if (currentSeries?.fullPath === "" || !prefix) {
+    if (!prefix) {
       // Send warning notification if not set
-      return toast.warn("Mangler arkivskaper, prosjekt eller arkivsere.", {
+      return toast.warn("Mangler arkivskaper, prosjekt eller arkivserie.", {
+        toastId: "capture",
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        theme: "light",
+      });
+    }
+    if (currentFolder.fullPath === "") {
+      // Send warning notification if not set
+      return toast.warn("Ingen mappe er valgt? Velg mappe og prøv igjen.", {
+        toastId: "capture",
         position: "top-right",
         autoClose: 3000,
         hideProgressBar: false,
@@ -27,9 +40,12 @@ const Capture = ({
       });
     }
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-    if (currentSeries.fullPath) {
+    if (currentFolder.fullPath) {
       // check if path is set
-      const image = await window.electron.captureImage(currentSeries.fullPath); // send signal to capture image to path
+      const image = await window.electron.captureImage(
+        currentFolder.fullPath,
+        currentSeries
+      ); // send signal to capture image to path
       if (currentImage !== image) {
         //check if image is not already set
         setImage(image); // set image captured

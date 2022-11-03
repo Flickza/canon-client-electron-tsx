@@ -1,5 +1,5 @@
 import { apiRequest } from "@/render/utils/api";
-import axios, { AxiosResponse } from "axios";
+import { AxiosResponse } from "axios";
 import React from "react";
 import { toast } from "react-toastify";
 
@@ -13,7 +13,7 @@ const NewProject = ({
   const [input, setInput] = React.useState("");
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setInput(event.target.value.replace(/[^a-zA-Z 0-9_-]/g, ""));
+    setInput(event.target.value.replace(/[^a-zA-Z 0-9_-]/g, "").toUpperCase());
   };
 
   const createProject = async () => {

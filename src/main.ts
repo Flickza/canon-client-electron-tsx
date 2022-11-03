@@ -63,9 +63,6 @@ const createWindow = (): void => {
   if (isDev) {
     mainWindow.webContents.openDevTools();
   }
-  console.log(
-    path.join(__dirname, "assets", "package", "icons", "win", "icon.ico")
-  );
 };
 
 // This method will be called when Electron has finished

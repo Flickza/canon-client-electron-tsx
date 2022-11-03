@@ -1,46 +1,59 @@
+import { apiRequest } from "@/render/utils/api";
 import { toast, ToastContentProps } from "react-toastify";
 import first_image from "../../../../../../assets/image/video-slash.png";
 
 const SaveToast = ({
+  id,
   closeToast,
   path,
   prefix,
   setImage,
 }: {
+  id: string | undefined;
   closeToast?: ToastContentProps["closeToast"];
   path?: folderObject;
   prefix?: string;
   setImage: React.Dispatch<React.SetStateAction<string>>;
 }): JSX.Element => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const yesOption: any = async (
+  const yesOption: any = (
     closeToast: ToastContentProps["closeToast"],
     prefix: string,
     path: folderObject
   ) => {
-    if (path && prefix) {
-      await toast
-        .promise(window.electron.saveImage(path, prefix), {
-          pending: `Jobber...`,
-          success: {
-            render({ data }: { data: string }) {
-              return `${data}`;
+    if (path && prefix && id) {
+      apiRequest("post", `/camera/save-to-path`, {
+        id: id,
+        filename: prefix,
+      }).then(async (response) => {
+        console.log(response);
+        await toast
+          .promise(
+            window.electron.saveImage(path, prefix),
+            {
+              pending: `Jobber...`,
+              success: {
+                render({ data }: { data: string }) {
+                  return `${data}`;
+                },
+              },
+              error: {
+                render({ data }: { data: string }) {
+                  return `Noe gikk galt.. ${data}`;
+                },
+              },
             },
-          },
-          error: {
-            render({ data }: { data: string }) {
-              return `Noe gikk galt.. ${data}`;
-            },
-          },
-        }, {
-          autoClose: 2000,
-        })
-        .then(() => {
-          if (closeToast) {
-            setImage(first_image);
-            closeToast();
-          }
-        });
+            {
+              autoClose: 2000,
+            }
+          )
+          .then(() => {
+            if (closeToast) {
+              setImage(first_image);
+              closeToast();
+            }
+          });
+      });
     }
   };
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -50,21 +63,25 @@ const SaveToast = ({
   ) => {
     if (path) {
       await toast
-        .promise(window.electron.deleteImage(path), {
-          pending: `Sletter bildet...`,
-          success: {
-            render({ data }: { data: string }) {
-              return `${data}`;
+        .promise(
+          window.electron.deleteImage(path),
+          {
+            pending: `Sletter bildet...`,
+            success: {
+              render({ data }: { data: string }) {
+                return `${data}`;
+              },
+            },
+            error: {
+              render({ data }: { data: string }) {
+                return `Noe gikk galt.. ${data}`;
+              },
             },
           },
-          error: {
-            render({ data }: { data: string }) {
-              return `Noe gikk galt.. ${data}`;
-            },
-          },
-        }, {
-          autoClose: 2000,
-        })
+          {
+            autoClose: 2000,
+          }
+        )
         .then(() => {
           if (closeToast) {
             closeToast();

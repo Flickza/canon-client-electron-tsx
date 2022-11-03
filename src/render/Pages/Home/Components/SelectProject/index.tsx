@@ -1,5 +1,5 @@
 import { apiRequest } from "@/render/utils/api";
-import axios, { AxiosResponse } from "axios";
+import { AxiosResponse } from "axios";
 import React, { useEffect } from "react";
 import { toast } from "react-toastify";
 
@@ -83,7 +83,12 @@ const SelectProject = ({
       >
         {projects?.map((a?) => {
           return (
-            <option className="form-select" key={a?.navn} value={a?.id}>
+            <option
+              className="form-select"
+              key={a?.navn}
+              id={a?.id?.toString()}
+              value={a?.navn}
+            >
               {a?.navn}
             </option>
           );

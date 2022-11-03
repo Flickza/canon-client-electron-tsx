@@ -39,9 +39,12 @@ export const electronBridge = {
     const dir: dirObject = await ipcRenderer.invoke("browse-directory");
     return dir;
   },
-  captureImage: async (p: string): Promise<string> => {
+  captureImage: async (
+    p: string,
+    series: Series | undefined
+  ): Promise<string> => {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-    const result: string = await ipcRenderer.invoke("capture-image", p);
+    const result: string = await ipcRenderer.invoke("capture-image", p, series);
     return result;
   },
   saveImage: async (path: folderObject, prefix: string): Promise<string> => {

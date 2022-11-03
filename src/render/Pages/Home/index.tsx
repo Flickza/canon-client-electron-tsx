@@ -35,7 +35,11 @@ const Home = () => {
   const [prefix, setPrefix] = React.useState<string | undefined>();
 
   useEffect(() => {
-    if (currentArkivskaper?.name && currentProject?.navn) {
+    if (
+      currentArkivskaper?.name &&
+      currentProject?.navn &&
+      currentSeries?.navn
+    ) {
       // get current date
       const date = new Date();
       // make a date string that looks like day-month-year
@@ -44,12 +48,16 @@ const Home = () => {
       }-${date.getUTCFullYear()}`;
       // create a prefix with [arkivskaper name]_[currentProject]_[dateString]
       setPrefix(
-        `${currentArkivskaper.name}_${currentProject.navn}_${dateString}`
+        `${currentArkivskaper.name}_${currentProject.navn}_${currentSeries.navn}_${dateString}`
       );
     } else {
       setPrefix(undefined);
     }
-  }, [currentProject, currentArkivskaper]);
+  }, [currentProject, currentArkivskaper, currentSeries]);
+
+  useEffect(() => {
+    setFolder({ fullPath: "", folderPath: "", last_image_index: 0 });
+  }, [currentArkivskaper]);
   return (
     <>
       <ToastContainer />
@@ -59,9 +67,10 @@ const Home = () => {
             <Image src={currentImage} />
           </div>
           <div className="col-span-4 min-h-full min-w-full">
-            <div className="grid-rows-7 lg:mr-16 lg:ml-16 xs:mr-5 xs:ml-5 mt-36">
+            <div className="grid-rows-7 lg:mr-16 lg:ml-16 xs:mr-5 xs:ml-5 mt-14">
               <div className="row-span-1 mt-5 flex justify-center">
                 <Save
+                  id={currentSeries?.id?.toString()}
                   setImage={setImage}
                   showModal={showModal}
                   setShowModal={setShowModal}
@@ -72,7 +81,7 @@ const Home = () => {
               <div className="row-span-1">
                 <NewArkivskaper setUpdateArkivskaper={setUpdateArkivskaper} />
               </div>
-              <div className="row-span-1 mt-10">
+              <div className="row-span-1 mt-5">
                 <SelectArkivskaper
                   current={currentArkivskaper}
                   set={setArkivskaper}
@@ -120,7 +129,8 @@ const Home = () => {
                   setImage={setImage}
                   currentImage={currentImage}
                   setShowModal={setShowModal}
-                  currentSeries={currentFolder}
+                  currentFolder={currentFolder}
+                  currentSeries={currentSeries}
                   prefix={prefix}
                 />
               </div>

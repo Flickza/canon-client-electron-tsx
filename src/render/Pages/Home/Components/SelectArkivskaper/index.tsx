@@ -1,7 +1,8 @@
 import React, { useEffect } from "react";
-import axios, { AxiosResponse } from "axios";
-import { toast } from "react-toastify";
+import { AxiosResponse } from "axios";
+import { toast, ToastOptions } from "react-toastify";
 import { apiRequest } from "@/render/utils/api";
+import { toastOptionsTop } from "@/render/utils/toast";
 
 const SelectArkivskaper = ({
   current,
@@ -24,16 +25,7 @@ const SelectArkivskaper = ({
             if (response.data.length === 0) {
               return toast.warn(
                 "Det finnes ingen arkivskapere enda. Legg til en ny?",
-                {
-                  position: "top-center",
-                  autoClose: 5000,
-                  hideProgressBar: false,
-                  closeOnClick: true,
-                  pauseOnHover: false,
-                  draggable: true,
-                  progress: undefined,
-                  theme: "light",
-                }
+                toastOptionsTop as ToastOptions
               );
             }
             setArkivskapere(response.data);
@@ -54,6 +46,7 @@ const SelectArkivskaper = ({
   }, [setArkivskapere, updateArkivskaper]);
 
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    toast.dismiss(1);
     const index = e.target.selectedIndex;
     const el = e.target.children[index];
     const id = el.getAttribute("id");

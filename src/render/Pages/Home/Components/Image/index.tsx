@@ -1,4 +1,3 @@
-import React from "react";
 import Viewer from "react-viewer";
 const Image = ({ src }: { src: string }): JSX.Element => {
   const viewer = document.getElementById("imageViewer") as HTMLElement;

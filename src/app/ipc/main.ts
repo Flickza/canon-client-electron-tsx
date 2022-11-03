@@ -1,3 +1,4 @@
+import { rejects } from "assert";
 import axios, { AxiosResponse } from "axios";
 import { app, BrowserWindow, ipcMain, dialog } from "electron";
 import fs, { createWriteStream } from "fs";
@@ -63,6 +64,7 @@ ipcMain.handle("browse-directory", async (): Promise<dirObject> => {
     const dir = await dialog.showOpenDialog({
       properties: ["openDirectory"],
     });
+    if (dir.canceled) return;
     const index = await getIndex(dir.filePaths[0]);
     resolve({
       canceled: dir.canceled,
@@ -74,22 +76,29 @@ ipcMain.handle("browse-directory", async (): Promise<dirObject> => {
 
 const TEMP_FILE = "temp.jpg";
 
-ipcMain.handle("capture-image", async (_e, p: string): Promise<string> => {
-  const temp = path.join(p, TEMP_FILE);
-  const finished = promisify(stream.finished);
-  const writer = createWriteStream(temp);
-  return axios({
-    method: "get",
-    url: "http://10.170.8.154:7373/camera/capture",
-    responseType: "stream",
-  }).then(async (response: AxiosResponse) => {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
-    response.data.pipe(writer);
-    return finished(writer).then(() => {
-      return temp;
-    }); //this is a Promise
-  });
-});
+ipcMain.handle(
+  "capture-image",
+  async (_e, p: string, s: Series): Promise<string | undefined> => {
+    const temp = path.join(p, TEMP_FILE);
+    const finished = promisify(stream.finished);
+    const writer = createWriteStream(temp);
+    if (s.id) {
+      return axios({
+        method: "get",
+        url: `http://10.170.8.154:7373/camera/capture/`,
+        responseType: "stream",
+      }).then(async (response: AxiosResponse) => {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
+        response.data.pipe(writer);
+        return finished(writer).then(() => {
+          return temp;
+        }); //this is a Promise
+      });
+    } else {
+      return;
+    }
+  }
+);
 
 ipcMain.handle(
   "save-image",
@@ -107,7 +116,10 @@ ipcMain.handle(
           path.join(p?.fullPath, TEMP_FILE),
           path.join(p?.fullPath, `${prefix}_${newIndex}.jpg`),
           (err) => {
-            if (err) reject(err.toString());
+            if (err) {
+              console.log(err);
+              reject(err.toString());
+            }
             resolve(`Ok. ${newIndex}`);
           }
         );

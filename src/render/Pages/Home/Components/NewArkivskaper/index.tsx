@@ -1,5 +1,5 @@
 import { apiRequest } from "@/render/utils/api";
-import axios, { AxiosResponse } from "axios";
+import { AxiosResponse } from "axios";
 import React from "react";
 import { toast } from "react-toastify";
 
@@ -11,13 +11,13 @@ const NewArkivskaper = ({
   const [input, setInput] = React.useState("");
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setInput(event.target.value.replace(/[^a-zA-Z 0-9_-æøå]/g, ""));
+    setInput(event.target.value.replace(/[^a-zA-Z 0-9_-æøå]/g, "").toUpperCase());
   };
 
   const createCreator = async () => {
     if (input.length > 0) {
       await toast
-        .promise(apiRequest("post", "/creator/${input}"), {
+        .promise(apiRequest("post", `/creator/${input}`), {
           pending: `Opretter ny arkivskaper: ${input}.`,
           success: `Opretting av arkivskaper: ${input} fullført.`,
           error: {

@@ -1,7 +1,8 @@
 import { apiRequest } from "@/render/utils/api";
+import { toastOptionsTop } from "@/render/utils/toast";
 import { AxiosResponse } from "axios";
 import React, { useEffect } from "react";
-import { toast } from "react-toastify";
+import { toast, ToastOptions } from "react-toastify";
 
 const SelectSeries = ({
   arkivskaper,
@@ -44,16 +45,7 @@ const SelectSeries = ({
                 `Det finnes ingen arkivserie på ${
                   arkivskaper?.name ? arkivskaper.name : ""
                 }, ${project?.navn ? project.navn : ""}. Legg til en ny?`,
-                {
-                  position: "top-center",
-                  autoClose: 5000,
-                  hideProgressBar: false,
-                  closeOnClick: true,
-                  pauseOnHover: false,
-                  draggable: true,
-                  progress: undefined,
-                  theme: "light",
-                }
+                toastOptionsTop as ToastOptions
               );
             }
           })
