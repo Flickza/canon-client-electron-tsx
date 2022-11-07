@@ -10,6 +10,7 @@ const Image = ({ src }: { src: string }): JSX.Element => {
         noClose
         noNavbar
         showTotal={false}
+        zoomSpeed={0.5}
         images={[{ src: src, alt: "" }]}
         zIndex={1}
       />

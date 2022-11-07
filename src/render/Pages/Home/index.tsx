@@ -34,6 +34,7 @@ const Home = () => {
   const [showModal, setShowModal] = React.useState(false);
   const [prefix, setPrefix] = React.useState<string | undefined>();
 
+  /* Creating a prefix for the images that are captured. */
   useEffect(() => {
     if (
       currentArkivskaper?.name &&
@@ -55,9 +56,11 @@ const Home = () => {
     }
   }, [currentProject, currentArkivskaper, currentSeries]);
 
+  /* Resetting the folder when the arkivskaper is changed. */
   useEffect(() => {
     setFolder({ fullPath: "", folderPath: "", last_image_index: 0 });
   }, [currentArkivskaper]);
+
   return (
     <>
       <ToastContainer />

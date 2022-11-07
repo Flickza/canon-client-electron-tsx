@@ -67,7 +67,7 @@ const SelectProject = ({
     const value = el.getAttribute("value");
     if (id && value) {
       set({
-        id: Number(id),
+        id: id,
         navn: value,
       });
     }
@@ -86,7 +86,7 @@ const SelectProject = ({
             <option
               className="form-select"
               key={a?.navn}
-              id={a?.id?.toString()}
+              id={a?.id}
               value={a?.navn}
             >
               {a?.navn}

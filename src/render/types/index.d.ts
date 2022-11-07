@@ -6,7 +6,7 @@ declare global {
   }
 
   export interface Project {
-    id?: number;
+    id: string;
     navn?: string;
     arkivskaper_id?: Creator["id"];
   }

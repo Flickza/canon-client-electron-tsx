@@ -1,4 +1,4 @@
-import { rejects } from "assert";
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import axios, { AxiosResponse } from "axios";
 import { app, BrowserWindow, ipcMain, dialog } from "electron";
 import fs, { createWriteStream } from "fs";
@@ -47,9 +47,20 @@ const getIndex = (path: string): Promise<number> => {
           f.splice(index_temp, 1);
         }
         if (f.length > 0) {
-          const lastFile = f[f.length - 1].split("_");
-          const number = lastFile[lastFile.length - 1].split(".")[0];
-          resolve(parseInt(number));
+          const highestIndex = f
+            .map((x) => {
+              const jpgnumber: Array<string> = x.match(/(_\d+.jpg)/g)!;
+              if (jpgnumber.length > 0) {
+                console.log(jpgnumber[0]);
+                return jpgnumber[0].replace(/_/g, "").replace(/.jpg/g, "");
+              } else {
+                return undefined;
+              }
+            })
+            .filter((x) => x !== undefined)
+            .reduce((a, b) => Math.max(Number(a), Number(b)).toString());
+          console.log(highestIndex);
+          resolve(Number(highestIndex) + 1);
         } else {
           resolve(0);
         }
@@ -106,21 +117,15 @@ ipcMain.handle(
     return new Promise(async (resolve, reject) => {
       if (p.fullPath) {
         const index = await getIndex(p?.fullPath);
-        let newIndex = 0;
-        if (index === 0) {
-          newIndex = 1;
-        } else {
-          newIndex = index + 1;
-        }
         fs.rename(
           path.join(p?.fullPath, TEMP_FILE),
-          path.join(p?.fullPath, `${prefix}_${newIndex}.jpg`),
+          path.join(p?.fullPath, `${prefix}_${index}.jpg`),
           (err) => {
             if (err) {
               console.log(err);
               reject(err.toString());
             }
-            resolve(`Ok. ${newIndex}`);
+            resolve(`Ok. ${index}`);
           }
         );
       } else {

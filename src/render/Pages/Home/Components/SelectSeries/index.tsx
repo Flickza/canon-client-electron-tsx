@@ -21,36 +21,29 @@ const SelectSeries = ({
 }) => {
   const [series, setSeries] = React.useState<Array<Series>>();
   useEffect(() => {
+    if (!arkivskaper?.id || project?.id === undefined) return;
     const fetchData = async () => {
-      if (arkivskaper?.id && project?.id) {
-        await apiRequest(
-          "get",
-          `/arkivserie/get/${arkivskaper.id}/${project.id}`
-        )
-          .then((response: AxiosResponse<Array<Series>>) => {
-            if (updateSeries === true) {
-              setUpdateSeries(false);
-            }
-            if (response.data) {
-              setSeries(response.data);
-            }
-            if (response?.data[0]?.navn && response?.data[0]?.id) {
-              set({
-                id: response.data[0].id,
-                navn: response.data[0].navn,
-              });
-            } else {
-              set(undefined);
-              return toast.warn(
-                `Det finnes ingen arkivserie på ${
-                  arkivskaper?.name ? arkivskaper.name : ""
-                }, ${project?.navn ? project.navn : ""}. Legg til en ny?`,
-                toastOptionsTop as ToastOptions
-              );
-            }
-          })
-          .catch((err) => console.error(err));
-      }
+      await apiRequest("get", `/arkivserie/get/${arkivskaper.id}/${project.id}`)
+        .then((response: AxiosResponse<Array<Series>>) => {
+          setUpdateSeries(false);
+          setSeries(response?.data);
+
+          if (response?.data[0]?.navn && response?.data[0]?.id) {
+            return set({
+              id: response.data[0].id,
+              navn: response.data[0].navn,
+            });
+          } else {
+            set(undefined);
+            return toast.warn(
+              `Det finnes ingen arkivserie på ${
+                arkivskaper?.name ? arkivskaper.name : ""
+              }, ${project?.navn ? project.navn : ""}. Legg til en ny?`,
+              toastOptionsTop as ToastOptions
+            );
+          }
+        })
+        .catch((err) => console.error(err));
     };
 
     fetchData().catch((err) => {
