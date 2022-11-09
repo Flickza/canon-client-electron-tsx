@@ -16,6 +16,7 @@ const SaveToast = ({
   setImage: React.Dispatch<React.SetStateAction<string>>;
 }): JSX.Element => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  console.log(id);
   const yesOption: any = (
     closeToast: ToastContentProps["closeToast"],
     prefix: string,
@@ -79,6 +80,7 @@ const SaveToast = ({
             },
           },
           {
+            className: "toastify__save",
             autoClose: 2000,
           }
         )

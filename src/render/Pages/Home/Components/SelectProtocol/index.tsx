@@ -69,7 +69,7 @@ const SelectProtocol = ({
       <select
         className="form-select select-arrow-down border w-full"
         onChange={handleChange}
-        value={current ? current?.navn : ""}
+        value={protocol ? current?.navn : ""}
         disabled={series?.id === undefined}
       >
         {protocol?.map((a?) => {

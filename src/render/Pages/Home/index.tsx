@@ -44,7 +44,8 @@ const Home = () => {
     if (
       currentArkivskaper?.name &&
       currentProject?.navn &&
-      currentSeries?.navn
+      currentSeries?.navn &&
+      currentProtocol?.navn
     ) {
       // get current date
       const date = new Date();
@@ -54,12 +55,13 @@ const Home = () => {
       }-${date.getUTCFullYear()}`;
       // create a prefix with [arkivskaper name]_[currentProject]_[dateString]
       setPrefix(
-        `${currentArkivskaper.name}_${currentProject.navn}_${currentSeries.navn}_${dateString}`
+        `mugg_${currentArkivskaper.name}_${currentProject.navn}_${currentSeries.navn}_${currentProtocol?.navn}_${dateString}`
       );
     } else {
       setPrefix(undefined);
+      return;
     }
-  }, [currentProject, currentArkivskaper, currentSeries]);
+  }, [currentProject, currentArkivskaper, currentSeries, currentProtocol]);
 
   /* Resetting the folder when the arkivskaper is changed. */
   useEffect(() => {
@@ -78,7 +80,7 @@ const Home = () => {
             <div className="grid-rows-7 lg:mr-16 lg:ml-16 xs:mr-5 xs:ml-5 mt-14">
               <div className="row-span-1 mt-5 flex justify-center">
                 <Save
-                  id={currentSeries?.id?.toString()}
+                  id={currentProtocol?.id?.toString()}
                   setImage={setImage}
                   showModal={showModal}
                   setShowModal={setShowModal}
@@ -153,7 +155,7 @@ const Home = () => {
                   currentImage={currentImage}
                   setShowModal={setShowModal}
                   currentFolder={currentFolder}
-                  currentSeries={currentSeries}
+                  currentProtocol={currentProtocol}
                   prefix={prefix}
                 />
               </div>

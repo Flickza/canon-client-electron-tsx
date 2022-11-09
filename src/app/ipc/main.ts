@@ -89,11 +89,11 @@ const TEMP_FILE = "temp.jpg";
 
 ipcMain.handle(
   "capture-image",
-  async (_e, p: string, s: Series): Promise<string | undefined> => {
+  async (_e, p: string, protocol: Protocol): Promise<string | undefined> => {
     const temp = path.join(p, TEMP_FILE);
     const finished = promisify(stream.finished);
     const writer = createWriteStream(temp);
-    if (s.id) {
+    if (protocol.id) {
       return axios({
         method: "get",
         url: `http://10.170.8.154:7373/camera/capture/`,

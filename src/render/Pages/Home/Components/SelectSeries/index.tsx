@@ -22,8 +22,11 @@ const SelectSeries = ({
   const [series, setSeries] = React.useState<Array<Series>>();
   useEffect(() => {
     const fetchData = async () => {
-      if (!arkivskaper?.id || project?.id === undefined)
-        return setSeries(undefined);
+      if (!arkivskaper?.id || project?.id === undefined) {
+        setSeries(undefined);
+        set(undefined);
+        return;
+      }
       await apiRequest("get", `/arkivserie/get/${arkivskaper.id}/${project.id}`)
         .then((response: AxiosResponse<Array<Series>>) => {
           setUpdateSeries(false);

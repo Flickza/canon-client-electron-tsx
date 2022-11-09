@@ -6,14 +6,14 @@ const Capture = ({
   currentImage,
   setShowModal,
   currentFolder,
-  currentSeries,
+  currentProtocol,
   prefix,
 }: {
   setImage: React.Dispatch<React.SetStateAction<string>>;
   currentImage: string;
   setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
   currentFolder: folderObject;
-  currentSeries: Series | undefined;
+  currentProtocol: Protocol | undefined;
   prefix: string | undefined;
 }) => {
   // handle capture button click
@@ -44,7 +44,7 @@ const Capture = ({
       // check if path is set
       const image = await window.electron.captureImage(
         currentFolder.fullPath,
-        currentSeries
+        currentProtocol
       ); // send signal to capture image to path
       if (currentImage !== image) {
         //check if image is not already set

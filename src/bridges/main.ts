@@ -41,10 +41,14 @@ export const electronBridge = {
   },
   captureImage: async (
     p: string,
-    series: Series | undefined
+    protocol: Protocol | undefined
   ): Promise<string> => {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-    const result: string = await ipcRenderer.invoke("capture-image", p, series);
+    const result: string = await ipcRenderer.invoke(
+      "capture-image",
+      p,
+      protocol
+    );
     return result;
   },
   saveImage: async (path: folderObject, prefix: string): Promise<string> => {
