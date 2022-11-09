@@ -4,42 +4,40 @@ import { AxiosResponse } from "axios";
 import React, { useEffect } from "react";
 import { toast, ToastOptions } from "react-toastify";
 
-const SelectSeries = ({
-  arkivskaper,
-  project,
+const SelectProtocol = ({
+  series,
   current,
   set,
-  setUpdateSeries,
-  updateSeries,
+  setUpdateProtocol,
+  updateProtocol,
 }: {
-  arkivskaper: Arkivskaper | undefined;
-  project: Project | undefined;
-  current: Series | undefined;
-  set: React.Dispatch<React.SetStateAction<Series | undefined>>;
-  setUpdateSeries: React.Dispatch<React.SetStateAction<boolean>>;
-  updateSeries: boolean;
+  series: Series | undefined;
+  current: Protocol | undefined;
+  set: React.Dispatch<React.SetStateAction<Protocol | undefined>>;
+  setUpdateProtocol: React.Dispatch<React.SetStateAction<boolean>>;
+  updateProtocol: boolean;
 }) => {
-  const [series, setSeries] = React.useState<Array<Series>>();
+  const [protocol, setProtocol] = React.useState<Array<Protocol>>();
   useEffect(() => {
     const fetchData = async () => {
-      if (!arkivskaper?.id || project?.id === undefined)
-        return setSeries(undefined);
-      await apiRequest("get", `/arkivserie/get/${arkivskaper.id}/${project.id}`)
-        .then((response: AxiosResponse<Array<Series>>) => {
-          setUpdateSeries(false);
-          setSeries(response?.data);
+      if (series?.id === undefined) return setProtocol(undefined);
+      await apiRequest("get", `/protocol/get/${series?.id?.toString()}`)
+        .then((response: AxiosResponse<Array<Protocol>>) => {
+          setUpdateProtocol(false);
+          setProtocol(response?.data);
 
           if (response?.data[0]?.navn && response?.data[0]?.id) {
             return set({
               id: response.data[0].id,
               navn: response.data[0].navn,
+              series_id: series.id,
             });
           } else {
             set(undefined);
             return toast.warn(
-              `Det finnes ingen arkivserie på ${
-                arkivskaper?.name ? arkivskaper.name : ""
-              }, ${project?.navn ? project.navn : ""}. Legg til en ny?`,
+              `Det finnes ingen protokoll på ${
+                series?.navn ? series.navn : ""
+              }. Legg til en ny?`,
               toastOptionsTop as ToastOptions
             );
           }
@@ -50,7 +48,8 @@ const SelectSeries = ({
     fetchData().catch((err) => {
       throw err;
     });
-  }, [project, updateSeries]);
+  }, [series, updateProtocol]);
+
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const index = e.target.selectedIndex;
     const el = e.target.children[index];
@@ -60,19 +59,20 @@ const SelectSeries = ({
       set({
         id: Number(id),
         navn: value,
+        series_id: series?.id,
       });
     }
   };
   return (
     <div>
-      <p>Velg Arkivserie:</p>
+      <p>Velg Protokoll:</p>
       <select
         className="form-select select-arrow-down border w-full"
         onChange={handleChange}
         value={current ? current?.navn : ""}
-        disabled={project?.id === undefined}
+        disabled={series?.id === undefined}
       >
-        {series?.map((a?) => {
+        {protocol?.map((a?) => {
           return (
             <option className="form-select" key={a?.navn} value={a?.id}>
               {a?.navn}
@@ -84,4 +84,4 @@ const SelectSeries = ({
   );
 };
 
-export default SelectSeries;
+export default SelectProtocol;

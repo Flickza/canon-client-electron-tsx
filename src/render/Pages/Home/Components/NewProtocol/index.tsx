@@ -3,14 +3,12 @@ import { AxiosResponse } from "axios";
 import React from "react";
 import { toast } from "react-toastify";
 
-const NewSeries = ({
-  arkivskaper,
-  project,
-  setUpdateSeries,
+const NewProtocol = ({
+  series,
+  setUpdateProtocol,
 }: {
-  arkivskaper: Arkivskaper | undefined;
-  project: Project | undefined;
-  setUpdateSeries: React.Dispatch<React.SetStateAction<boolean>>;
+  series: Series | undefined;
+  setUpdateProtocol: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
   const [input, setInput] = React.useState("");
 
@@ -18,38 +16,29 @@ const NewSeries = ({
     setInput(event.target.value.replace(/[^a-zA-Z 0-9_-]/g, "").toUpperCase());
   };
 
-  const createSeries = async () => {
-    if (
-      input.length > 0 &&
-      arkivskaper?.id !== undefined &&
-      project?.id !== undefined
-    ) {
-      console.log(`/arkivserie/${arkivskaper?.id}/${project?.id}/${input}`);
+  const CreateProtocol = async () => {
+    if (input.length > 0 && series?.id !== undefined) {
+      console.log(`/protokoll/${series?.id}/${input}`);
       await toast
-        .promise(
-          apiRequest(
-            "post",
-            `/arkivserie/${arkivskaper?.id}/${project?.id}/${input}`
-          ),
-          {
-            pending: `Opretter ny arkivserie: ${input}.`,
-            success: `Opretting av arkivserie: ${input} fullført.`,
-            error: {
-              render({ data }: AxiosResponse) {
-                // eslint-disable-next-line @typescript-eslint/restrict-template-expressions, @typescript-eslint/no-unsafe-member-access
-                return `Noe gikk galt, prøv igjen senere. \n ${data?.response?.data?.code}`;
-              },
+        .promise(apiRequest("post", `/protocol/${series?.id}/${input}`), {
+          pending: `Opretter ny protokoll: ${input}.`,
+          success: `Opretting av protokoll: ${input} fullført.`,
+          error: {
+            render({ data }: AxiosResponse) {
+              // eslint-disable-next-line @typescript-eslint/restrict-template-expressions, @typescript-eslint/no-unsafe-member-access
+              return `Noe gikk galt, prøv igjen senere. \n ${data?.response?.data?.code}`;
             },
-          }
-        )
+          },
+        })
         .then(() => {
-          if (arkivskaper.id !== "" && project.id !== undefined) {
+          if (series.id !== undefined) {
             setInput("");
-            setUpdateSeries(true);
+            setUpdateProtocol(true);
           }
         });
     }
   };
+
   const [show, setShow] = React.useState(true);
 
   const toggleShow = () => {
@@ -60,7 +49,7 @@ const NewSeries = ({
     <div>
       <button className="btn btn-main border w-full" onClick={toggleShow}>
         <span className="flex justify-center text-lg text-left">
-          <p>Ny Arkivserie</p>
+          <p>Ny Protokoll</p>
         </span>
       </button>
       <div className="transition-all mt-1" hidden={show}>
@@ -70,12 +59,12 @@ const NewSeries = ({
             className="form-control border w-5/6"
             value={input}
             onChange={handleChange}
-            disabled={arkivskaper?.id === undefined}
+            disabled={series?.id === undefined}
           />
           <button
             className="btn btn-main border w-1/6"
-            onClick={createSeries}
-            disabled={arkivskaper?.id === undefined}
+            onClick={CreateProtocol}
+            disabled={series?.id === undefined}
           >
             <span className="flex justify-center">
               <svg
@@ -100,4 +89,4 @@ const NewSeries = ({
   );
 };
 
-export default NewSeries;
+export default NewProtocol;

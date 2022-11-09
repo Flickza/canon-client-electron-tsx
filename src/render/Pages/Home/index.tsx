@@ -13,6 +13,8 @@ import "./index.css";
 import FolderName from "./Components/FolderName";
 import SelectSeries from "./Components/SelectSeries";
 import NewSeries from "./Components/NewSeries";
+import NewProtocol from "./Components/NewProtocol";
+import SelectProtocol from "./Components/SelectProtocol";
 
 const Home = () => {
   const [currentImage, setImage] = React.useState(first_image);
@@ -26,10 +28,13 @@ const Home = () => {
     last_image_index: 0,
   });
 
+  const [currentProtocol, setProtocol] = React.useState<Protocol | undefined>();
+
   const [updateArkivskaper, setUpdateArkivskaper] =
     React.useState<boolean>(false);
   const [updateProject, setUpdateProject] = React.useState<boolean>(false);
   const [updateSeries, setUpdateSeries] = React.useState<boolean>(false);
+  const [updateProtocol, setUpdateProtocol] = React.useState<boolean>(false);
 
   const [showModal, setShowModal] = React.useState(false);
   const [prefix, setPrefix] = React.useState<string | undefined>();
@@ -81,21 +86,34 @@ const Home = () => {
                   prefix={prefix}
                 />
               </div>
-              <div className="row-span-1">
+              <div className="row-span-1 mt-1">
                 <NewArkivskaper setUpdateArkivskaper={setUpdateArkivskaper} />
               </div>
-              <div className="row-span-1 mt-5">
+              <div className="row-span-1 mt-1">
+                <NewProject
+                  arkivskaper={currentArkivskaper}
+                  setUpdateProject={setUpdateProject}
+                />
+              </div>
+              <div className="row-span-1 mt-1">
+                <NewSeries
+                  setUpdateSeries={setUpdateSeries}
+                  arkivskaper={currentArkivskaper}
+                  project={currentProject}
+                />
+              </div>
+              <div className="row-span-1 mt-1">
+                <NewProtocol
+                  setUpdateProtocol={setUpdateProtocol}
+                  series={currentSeries}
+                />
+              </div>
+              <div className="row-span-1 mt-2">
                 <SelectArkivskaper
                   current={currentArkivskaper}
                   set={setArkivskaper}
                   updateArkivskaper={updateArkivskaper}
                   setUpdateArkivskaper={setUpdateArkivskaper}
-                />
-              </div>
-              <div className="row-span-1 mt-5">
-                <NewProject
-                  arkivskaper={currentArkivskaper}
-                  setUpdateProject={setUpdateProject}
                 />
               </div>
               <div className="row-span-1 mt-5">
@@ -108,13 +126,6 @@ const Home = () => {
                 />
               </div>
               <div className="row-span-1 mt-5">
-                <NewSeries
-                  setUpdateSeries={setUpdateSeries}
-                  arkivskaper={currentArkivskaper}
-                  project={currentProject}
-                />
-              </div>
-              <div className="row-span-1 mt-5">
                 <SelectSeries
                   arkivskaper={currentArkivskaper}
                   project={currentProject}
@@ -122,6 +133,15 @@ const Home = () => {
                   set={setSeries}
                   setUpdateSeries={setUpdateSeries}
                   updateSeries={updateSeries}
+                />
+              </div>
+              <div className="row-span-1 mt-5">
+                <SelectProtocol
+                  series={currentSeries}
+                  current={currentProtocol}
+                  set={setProtocol}
+                  setUpdateProtocol={setUpdateProtocol}
+                  updateProtocol={updateProtocol}
                 />
               </div>
               <div className="row-span-1 mt-5">

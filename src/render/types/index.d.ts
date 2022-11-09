@@ -17,6 +17,13 @@ declare global {
     arkivskaper_id?: Creator["id"];
   }
 
+  export interface Protocol {
+    id?: number;
+    navn?: string;
+    path?: string;
+    series_id: Series["id"];
+  }
+
   export interface dirObject {
     canceled: boolean;
     filePaths: Array<string>;
