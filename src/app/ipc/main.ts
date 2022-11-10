@@ -51,7 +51,6 @@ const getIndex = (path: string): Promise<number> => {
             .map((x) => {
               const jpgnumber: Array<string> = x.match(/(_\d+.jpg)/g)!;
               if (jpgnumber.length > 0) {
-                console.log(jpgnumber[0]);
                 return jpgnumber[0].replace(/_/g, "").replace(/.jpg/g, "");
               } else {
                 return undefined;
@@ -59,7 +58,6 @@ const getIndex = (path: string): Promise<number> => {
             })
             .filter((x) => x !== undefined)
             .reduce((a, b) => Math.max(Number(a), Number(b)).toString());
-          console.log(highestIndex);
           resolve(Number(highestIndex) + 1);
         } else {
           resolve(0);
@@ -122,7 +120,6 @@ ipcMain.handle(
           path.join(p?.fullPath, `${prefix}_${index}.jpg`),
           (err) => {
             if (err) {
-              console.log(err);
               reject(err.toString());
             }
             resolve(`Ok. ${index}`);

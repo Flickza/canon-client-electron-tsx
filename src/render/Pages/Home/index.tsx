@@ -15,12 +15,12 @@ import SelectSeries from "./Components/SelectSeries";
 import NewSeries from "./Components/NewSeries";
 import NewProtocol from "./Components/NewProtocol";
 import SelectProtocol from "./Components/SelectProtocol";
+import { resetImage } from "@/render/utils/resetImage";
 
 const Home = () => {
   const [currentImage, setImage] = React.useState(first_image);
   const [currentProject, setProject] = React.useState<Project | undefined>();
   const [currentArkivskaper, setArkivskaper] = React.useState<Arkivskaper>();
-
   const [currentSeries, setSeries] = React.useState<Series | undefined>();
   const [currentFolder, setFolder] = React.useState<folderObject>({
     fullPath: "",
@@ -61,6 +61,7 @@ const Home = () => {
       setPrefix(undefined);
       return;
     }
+    resetImage();
   }, [currentProject, currentArkivskaper, currentSeries, currentProtocol]);
 
   /* Resetting the folder when the arkivskaper is changed. */
@@ -68,6 +69,16 @@ const Home = () => {
     setFolder({ fullPath: "", folderPath: "", last_image_index: 0 });
   }, [currentArkivskaper]);
 
+  useEffect(() => {
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const divs = Array.from(document.querySelectorAll("div")!);
+    divs.forEach((div) => {
+      if (div.firstChild === null && div?.parentElement?.nodeName === "BODY") {
+        div.remove();
+      }
+    });
+    resetImage();
+  }, [currentImage]);
   return (
     <>
       <ToastContainer />
