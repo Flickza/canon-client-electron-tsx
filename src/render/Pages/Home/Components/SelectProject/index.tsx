@@ -2,6 +2,7 @@ import { apiRequest } from "@/render/utils/api";
 import { AxiosResponse } from "axios";
 import React, { useEffect } from "react";
 import { toast } from "react-toastify";
+import NewProject from "../NewProject";
 
 const SelectProject = ({
   arkivskaper,
@@ -72,29 +73,60 @@ const SelectProject = ({
       });
     }
   };
+  const [show, setShow] = React.useState(true);
+
+  const toggleShow = () => {
+    setShow(!show);
+  };
+
   return (
-    <div>
+    <>
       <p>Velg prosjekt:</p>
-      <select
-        className="form-select select-arrow-down border w-full"
-        onChange={handleChange}
-        value={current?.navn}
-        disabled={arkivskaper?.id === undefined}
-      >
-        {projects?.map((a?) => {
-          return (
-            <option
-              className="form-select"
-              key={a?.navn}
-              id={a?.id}
-              value={a?.navn}
+      <span className="flex gap-3">
+        <select
+          className="form-select select-arrow-down border w-11/12"
+          onChange={handleChange}
+          value={current?.navn}
+          disabled={arkivskaper?.id === undefined}
+        >
+          {projects?.map((a?) => {
+            return (
+              <option
+                className="form-select"
+                key={a?.navn}
+                id={a?.id}
+                value={a?.navn}
+              >
+                {a?.navn}
+              </option>
+            );
+          })}
+        </select>
+        <button className="btn btn-main border w-1/12" onClick={toggleShow}>
+          <span className="flex justify-center">
+            <svg
+              fill="white"
+              width={"60%"}
+              x="0px"
+              y="0px"
+              viewBox="0 0 290 290"
             >
-              {a?.navn}
-            </option>
-          );
-        })}
-      </select>
-    </div>
+              <g>
+                <path d="M255,110c-19.299,0-35,15.701-35,35s15.701,35,35,35s35-15.701,35-35S274.299,110,255,110z" />
+                <path d="M35,110c-19.299,0-35,15.701-35,35s15.701,35,35,35s35-15.701,35-35S54.299,110,35,110z" />
+                <path d="M145,110c-19.299,0-35,15.701-35,35s15.701,35,35,35s35-15.701,35-35S164.299,110,145,110z" />
+              </g>
+            </svg>
+          </span>
+        </button>
+      </span>
+      <div className="transition-all mt-1" hidden={show}>
+        <NewProject
+          arkivskaper={arkivskaper}
+          setUpdateProject={setUpdateProject}
+        />
+      </div>
+    </>
   );
 };
 

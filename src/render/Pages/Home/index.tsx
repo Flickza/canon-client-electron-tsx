@@ -1,7 +1,5 @@
 import React, { useEffect } from "react";
 import Image from "./Components/Image";
-import NewArkivskaper from "./Components/NewArkivskaper";
-import NewProject from "./Components/NewProject";
 import SelectArkivskaper from "./Components/SelectArkivskaper";
 import SelectProject from "./Components/SelectProject";
 import first_image from "../../../../assets/image/video-slash.png";
@@ -12,8 +10,6 @@ import Save from "./Components/Save";
 import "./index.css";
 import FolderName from "./Components/FolderName";
 import SelectSeries from "./Components/SelectSeries";
-import NewSeries from "./Components/NewSeries";
-import NewProtocol from "./Components/NewProtocol";
 import SelectProtocol from "./Components/SelectProtocol";
 import { resetImage } from "@/render/utils/resetImage";
 
@@ -27,7 +23,6 @@ const Home = () => {
     folderPath: "",
     last_image_index: 0,
   });
-
   const [currentProtocol, setProtocol] = React.useState<Protocol | undefined>();
 
   const [updateArkivskaper, setUpdateArkivskaper] =
@@ -87,9 +82,9 @@ const Home = () => {
           <div className="col-span-6 min-h-screen">
             <Image src={currentImage} />
           </div>
-          <div className="col-span-4 min-h-full min-w-full">
-            <div className="grid-rows-7 lg:mr-16 lg:ml-16 xs:mr-5 xs:ml-5 mt-14">
-              <div className="row-span-1 mt-5 flex justify-center">
+          <div className="col-span-4 min-h-full flex">
+            <div className="grid grid-cols-8 gap-6 content-center">
+              <div className="col-start-2 col-span-6">
                 <Save
                   id={currentProtocol?.id?.toString()}
                   setImage={setImage}
@@ -99,29 +94,7 @@ const Home = () => {
                   prefix={prefix}
                 />
               </div>
-              <div className="row-span-1 mt-1">
-                <NewArkivskaper setUpdateArkivskaper={setUpdateArkivskaper} />
-              </div>
-              <div className="row-span-1 mt-1">
-                <NewProject
-                  arkivskaper={currentArkivskaper}
-                  setUpdateProject={setUpdateProject}
-                />
-              </div>
-              <div className="row-span-1 mt-1">
-                <NewSeries
-                  setUpdateSeries={setUpdateSeries}
-                  arkivskaper={currentArkivskaper}
-                  project={currentProject}
-                />
-              </div>
-              <div className="row-span-1 mt-1">
-                <NewProtocol
-                  setUpdateProtocol={setUpdateProtocol}
-                  series={currentSeries}
-                />
-              </div>
-              <div className="row-span-1 mt-2">
+              <div className="col-start-2 col-span-6">
                 <SelectArkivskaper
                   current={currentArkivskaper}
                   set={setArkivskaper}
@@ -129,7 +102,7 @@ const Home = () => {
                   setUpdateArkivskaper={setUpdateArkivskaper}
                 />
               </div>
-              <div className="row-span-1 mt-5">
+              <div className="col-start-2 col-span-6">
                 <SelectProject
                   arkivskaper={currentArkivskaper}
                   current={currentProject}
@@ -138,7 +111,7 @@ const Home = () => {
                   updateProject={updateProject}
                 />
               </div>
-              <div className="row-span-1 mt-5">
+              <div className="col-start-2 col-span-6">
                 <SelectSeries
                   arkivskaper={currentArkivskaper}
                   project={currentProject}
@@ -148,7 +121,7 @@ const Home = () => {
                   updateSeries={updateSeries}
                 />
               </div>
-              <div className="row-span-1 mt-5">
+              <div className="col-start-2 col-span-6">
                 <SelectProtocol
                   series={currentSeries}
                   current={currentProtocol}
@@ -157,10 +130,10 @@ const Home = () => {
                   updateProtocol={updateProtocol}
                 />
               </div>
-              <div className="row-span-1 mt-5">
+              <div className="col-start-2 col-span-6">
                 <FolderName current={currentFolder} set={setFolder} />
               </div>
-              <div className="row-span-1 mt-5 flex justify-center">
+              <div className="col-start-2 col-span-6">
                 <Capture
                   setImage={setImage}
                   currentImage={currentImage}

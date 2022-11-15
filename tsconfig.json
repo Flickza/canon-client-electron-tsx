@@ -18,7 +18,7 @@
       "@assets/*": ["./assets/*"],
       "@containers/*": ["./src/render/containers/*"],
       "@components/*": ["./src/render/components/*"],
-      "@redux/*": ["./src/render/redux/*"]
+      "@redux/*": ["src/render/store/*"]
     }
   },
   "include": ["src/**/*", "assets/**/*", "src/render/types/index.d.ts"]
