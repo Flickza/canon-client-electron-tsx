@@ -4,7 +4,7 @@ import SelectArkivskaper from "./Components/SelectArkivskaper";
 import SelectProject from "./Components/SelectProject";
 import first_image from "../../../../assets/image/video-slash.png";
 import Capture from "./Components/Capture";
-import { ToastContainer } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Save from "./Components/Save";
 import "./index.css";
@@ -56,6 +56,7 @@ const Home = () => {
       setPrefix(undefined);
       return;
     }
+    toast.dismiss();
     resetImage();
   }, [currentProject, currentArkivskaper, currentSeries, currentProtocol]);
 
@@ -83,7 +84,7 @@ const Home = () => {
             <Image src={currentImage} />
           </div>
           <div className="col-span-4 min-h-full flex">
-            <div className="grid grid-cols-8 gap-6 content-center">
+            <div className="grid grid-cols-8 gap-6 min-w-full content-center">
               <div className="col-start-2 col-span-6">
                 <Save
                   id={currentProtocol?.id?.toString()}

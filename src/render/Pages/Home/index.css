@@ -64,3 +64,14 @@
 .toastify__save {
   --toastify-toast-width: fit-content;
 }
+
+.entry-drawer:after {
+  opacity: 1;
+  position: fixed;
+  display: flex;
+  transition: ease-in-out 0.3s all;
+}
+.entry-drawer:before {
+  transition: ease-in-out 0.3s all;
+  opacity: 0;
+}
