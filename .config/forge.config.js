@@ -12,8 +12,8 @@ module.exports = {
       name: "@electron-forge/publisher-github",
       config: {
         repository: {
-          owner: "AdelHolm",
-          name: "canon-api-web-tsx",
+          owner: "Flickza",
+          name: "canon-client-electron-tsx",
           authToken: process.env.GITHUB_TOKEN,
         },
         draft: true,
@@ -27,7 +27,7 @@ module.exports = {
       name: "@electron-forge/maker-squirrel",
       config: {
         // https://js.electronforge.io/maker/squirrel/interfaces/makersquirrelconfig
-        setupExe: "Windows Setup.exe",
+        setupExe: "AIN Muggfoto Setup.exe",
         iconUrl: path.join(packageAssetsPath, "icons", "win", "icon.ico"),
         setupIcon: path.join(packageAssetsPath, "icons", "win", "icon.ico"),
         authors: "Arkiv i Nordland",
@@ -42,7 +42,7 @@ module.exports = {
         icon: path.join(packageAssetsPath, "icons", "mac", "icon.icns"),
         background: path.join(packageAssetsPath, "source.png"),
         overwrite: true,
-        name: "electron-boilerplate", // NEEDS TO BE SHORTER THAN 27 CHARACTERS
+        name: "AIN Muggfoto", // NEEDS TO BE SHORTER THAN 27 CHARACTERS
       },
     },
 
