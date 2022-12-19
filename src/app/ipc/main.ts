@@ -6,6 +6,8 @@ import path from "path";
 import * as stream from "stream";
 import { promisify } from "util";
 
+const baseURL = `http://10.170.8.130:7373`;
+
 ipcMain.on("quit-app", () => {
   app.quit();
 });
@@ -94,7 +96,7 @@ ipcMain.handle(
     if (protocol.id) {
       return axios({
         method: "get",
-        url: `http://10.170.8.154:7373/camera/capture/`,
+        url: `${baseURL}/camera/capture/`,
         responseType: "stream",
       }).then(async (response: AxiosResponse) => {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call

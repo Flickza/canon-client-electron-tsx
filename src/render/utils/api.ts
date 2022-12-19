@@ -1,5 +1,5 @@
 import axios from "axios";
-const baseURL = "http://10.170.8.154:7373";
+const baseURL = "http://10.170.8.130:7373";
 
 export const apiRequest = async (
   method: string | undefined,
