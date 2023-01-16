@@ -3,12 +3,16 @@ import {
   ipcRenderer,
   contextBridge,
   shell,
+  webFrame,
   OpenExternalOptions,
 } from "electron";
 
 export const electronBridge = {
   quit: (): void => {
     ipcRenderer.send("quit-app");
+  },
+  clearCache: (): void => {
+    webFrame.clearCache();
   },
 
   minimize: (): void => {

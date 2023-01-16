@@ -91,6 +91,9 @@ ipcMain.handle(
   "capture-image",
   async (_e, p: string, protocol: Protocol): Promise<string | undefined> => {
     const temp = path.join(p, TEMP_FILE);
+    if (fs.existsSync(temp)) {
+      fs.unlinkSync(temp);
+    }
     const finished = promisify(stream.finished);
     const writer = createWriteStream(temp);
     if (protocol.id) {
@@ -137,10 +140,12 @@ ipcMain.handle("delete-temp", (_e, p: folderObject): Promise<string> => {
   return new Promise((resolve, reject) => {
     if (p.fullPath) {
       const temp = path.join(p.fullPath, TEMP_FILE);
-      fs.unlink(temp, (err) => {
-        if (err) reject(err.toString());
-        resolve("Ok.");
-      });
+      if (fs.existsSync(temp)) {
+        fs.unlink(temp, (err) => {
+          if (err) reject(err.toString());
+          resolve("Ok.");
+        });
+      }
     } else {
       reject("Could not find dir path.");
     }

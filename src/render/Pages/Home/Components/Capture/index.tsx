@@ -29,6 +29,7 @@ const Capture = ({
         theme: "light",
       });
     }
+    window.electron.clearCache(); // clear cache
     if (currentFolder.fullPath === "") {
       // Send warning notification if not set
       return toast.warn("Ingen mappe er valgt? Velg mappe og prøv igjen.", {
