@@ -15,7 +15,11 @@ const FolderName = ({
       const fullPath = path?.filePaths[0];
       const folder = fullPath.split("\\").at(-1);
       if (folder) {
-        set({ fullPath: fullPath, folderPath: folder, last_image_index: path.last_image_index });
+        set({
+          fullPath: fullPath,
+          folderPath: folder,
+          last_image_index: path.last_image_index,
+        });
         return toast.success(`Ok. ${fullPath}`, {
           position: "top-right",
           autoClose: 2000,
@@ -39,7 +43,10 @@ const FolderName = ({
           className="form-control border w-5/6"
           placeholder={current.folderPath}
         />
-        <button className="btn btn-main border w-1/6" onClick={openPath}>
+        <button
+          className="btn btn-main border w-1/6 step-11"
+          onClick={openPath}
+        >
           <span className="flex justify-center">
             <svg
               xmlns="http://www.w3.org/2000/svg"

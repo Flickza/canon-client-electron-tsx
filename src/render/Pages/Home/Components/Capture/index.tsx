@@ -43,21 +43,31 @@ const Capture = ({
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     if (currentFolder.fullPath) {
       // check if path is set
-      const image = await window.electron.captureImage(
+      const capture: response = await window.electron.captureImage(
         currentFolder.fullPath,
         currentProtocol
       ); // send signal to capture image to path
-      if (currentImage !== image) {
-        //check if image is not already set
-        setImage(image); // set image captured
+      if (capture.statusCode !== 200) {
+        // check if capture failed
+        return toast.error(capture.message, {
+          toastId: "capture",
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          theme: "light",
+        });
       }
-      setShowModal(true); // show save yes/no notification
+      //check if image is not already set
+      if (capture.file === typeof String && capture.file !== currentImage) {
+        setImage(capture.file); // set image captured
+        setShowModal(true); // show save yes/no notification
+      }
     }
   };
   return (
     <div className="flex justify-center">
       <button
-        className="btn btn-main border p-2 w-2/4 hover:brightness-125 rounded-b flex justify-center"
+        className="btn btn-main border p-2 w-2/4 hover:brightness-125 rounded-b flex justify-center step-11"
         onClick={handleCapture}
       >
         <span>

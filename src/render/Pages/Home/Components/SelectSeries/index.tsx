@@ -103,7 +103,7 @@ const SelectSeries = ({
             );
           })}
         </select>
-        <button className="btn btn-main border w-1/12" onClick={toggle}>
+        <button className="btn btn-main border w-1/12 step-9" onClick={toggle}>
           <Add />
         </button>
       </span>

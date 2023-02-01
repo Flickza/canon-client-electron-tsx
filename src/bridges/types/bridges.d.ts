@@ -5,4 +5,9 @@ declare global {
     electron: typeof electronBridge;
     store: typeof storeBridge;
   }
+  interface response {
+    statusCode: number;
+    file?: string;
+    message: string | unknown;
+  }
 }

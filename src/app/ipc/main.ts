@@ -1,3 +1,4 @@
+import { AxiosError } from "axios";
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import axios, { AxiosResponse } from "axios";
 import { app, BrowserWindow, ipcMain, dialog } from "electron";
@@ -86,30 +87,69 @@ ipcMain.handle("browse-directory", async (): Promise<dirObject> => {
 });
 
 const TEMP_FILE = "temp.jpg";
+const checkExists = (path: string): boolean => {
+  return fs.existsSync(path);
+};
+
+const removeFile = (path: string): void => {
+  return fs.unlink(path, (err) => {
+    if (err) throw err;
+  });
+};
+
+const handleError = (
+  statusCode: number,
+  message: string | unknown,
+  file?: string
+): response => {
+  return { statusCode: statusCode, message: message, file: file };
+};
 
 ipcMain.handle(
   "capture-image",
-  async (_e, p: string, protocol: Protocol): Promise<string | undefined> => {
+  async (_e, p: string, protocol: Protocol): Promise<response> => {
     const temp = path.join(p, TEMP_FILE);
-    if (fs.existsSync(temp)) {
-      fs.unlinkSync(temp);
-    }
+    if (checkExists(temp)) removeFile(temp);
     const finished = promisify(stream.finished);
     const writer = createWriteStream(temp);
     if (protocol.id) {
-      return axios({
-        method: "get",
-        url: `${baseURL}/camera/capture/`,
-        responseType: "stream",
-      }).then(async (response: AxiosResponse) => {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
-        response.data.pipe(writer);
-        return finished(writer).then(() => {
-          return temp;
-        }); //this is a Promise
-      });
+      try {
+        return await axios({
+          method: "get",
+          url: `${baseURL}/camera/capture/`,
+          responseType: "stream",
+        })
+          .then(async (response: AxiosResponse) => {
+            if (response.status !== 200)
+              handleError(
+                response.status,
+                response.statusText || "Could not capture image."
+              );
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
+            response.data.pipe(writer);
+            return finished(writer).then(() => {
+              return { statusCode: 200, file: temp, message: "OK" };
+            }); //this is a Promise
+          })
+          .catch((reason: AxiosError) => {
+            writer.end();
+            if (checkExists(temp)) removeFile(temp);
+            console.log(reason);
+            return handleError(
+              reason.status || 500,
+              `Could not capture image. \n ${reason.message}`
+            );
+          });
+      } catch (err) {
+        writer.end();
+        if (checkExists(temp)) removeFile(temp);
+        return err;
+      }
     } else {
-      return;
+      return {
+        statusCode: 400,
+        message: "Could not capture image. Protocol ID not found.",
+      };
     }
   }
 );
@@ -139,13 +179,9 @@ ipcMain.handle(
 ipcMain.handle("delete-temp", (_e, p: folderObject): Promise<string> => {
   return new Promise((resolve, reject) => {
     if (p.fullPath) {
-      const temp = path.join(p.fullPath, TEMP_FILE);
-      if (fs.existsSync(temp)) {
-        fs.unlink(temp, (err) => {
-          if (err) reject(err.toString());
-          resolve("Ok.");
-        });
-      }
+      const temp: string = path.join(p.fullPath, TEMP_FILE);
+      if (checkExists(temp)) removeFile(temp);
+      resolve("Ok");
     } else {
       reject("Could not find dir path.");
     }

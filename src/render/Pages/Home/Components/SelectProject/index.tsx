@@ -115,7 +115,7 @@ const SelectProject = ({
             );
           })}
         </select>
-        <button className="btn btn-main border w-1/12" onClick={toggle}>
+        <button className="btn btn-main border w-1/12 step-7" onClick={toggle}>
           <Add />
         </button>
       </span>

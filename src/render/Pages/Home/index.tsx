@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-return */
 import React, { useEffect } from "react";
 import Image from "./Components/Image";
 import SelectArkivskaper from "./Components/SelectArkivskaper";
@@ -12,6 +13,7 @@ import FolderName from "./Components/FolderName";
 import SelectSeries from "./Components/SelectSeries";
 import SelectProtocol from "./Components/SelectProtocol";
 import { resetImage } from "@/render/utils/resetImage";
+import { useTour } from "@reactour/tour";
 
 const Home = () => {
   const [currentImage, setImage] = React.useState(first_image);
@@ -30,6 +32,7 @@ const Home = () => {
   const [updateProject, setUpdateProject] = React.useState<boolean>(false);
   const [updateSeries, setUpdateSeries] = React.useState<boolean>(false);
   const [updateProtocol, setUpdateProtocol] = React.useState<boolean>(false);
+  const { setIsOpen } = useTour();
 
   const [showModal, setShowModal] = React.useState(false);
   const [prefix, setPrefix] = React.useState<string | undefined>();
@@ -78,14 +81,22 @@ const Home = () => {
   return (
     <>
       <ToastContainer />
-      <div className="md:container-fluid md:mx-auto text-white text-lg min-h-screen flex justify-center bg-neutral-700">
-        <div className="grid grid-cols-10 gap-1 min-h-full min-w-full">
+      <div className="md:container-fluid flex min-h-screen justify-center bg-neutral-700 text-lg text-white md:mx-auto">
+        <div className="fixed z-50 flex h-screen w-screen flex-grow flex-col items-center justify-center md:hidden">
+          <div className="text-xl text-red-500">
+            Screensize is too small to use this application.
+          </div>
+          <div className="text-base text-orange-100/90">
+            Please use a larger screen or resize the application.
+          </div>
+        </div>
+        <div className="min-h-full min-w-full grid-cols-10 gap-1 sm:hidden md:grid">
           <div className="col-span-6 min-h-screen">
             <Image src={currentImage} />
           </div>
-          <div className="col-span-4 min-h-full flex">
-            <div className="grid grid-cols-8 gap-6 min-w-full content-center">
-              <div className="col-start-2 col-span-6">
+          <div className="step-1 col-span-4 flex min-h-full">
+            <div className="grid min-w-full grid-cols-8 content-center gap-6">
+              <div className="col-span-6 col-start-2">
                 <Save
                   id={currentProtocol?.id?.toString()}
                   setImage={setImage}
@@ -95,7 +106,15 @@ const Home = () => {
                   prefix={prefix}
                 />
               </div>
-              <div className="col-start-2 col-span-6">
+              <div className="col-span-6 col-start-2 flex justify-end">
+                <button
+                  className="btn btn-main w-full border p-3 lg:w-1/2"
+                  onClick={() => setIsOpen(true)}
+                >
+                  Brukerveiledning
+                </button>
+              </div>
+              <div className="step-2 step-3 col-span-6 col-start-2">
                 <SelectArkivskaper
                   current={currentArkivskaper}
                   set={setArkivskaper}
@@ -103,7 +122,7 @@ const Home = () => {
                   setUpdateArkivskaper={setUpdateArkivskaper}
                 />
               </div>
-              <div className="col-start-2 col-span-6">
+              <div className="step-6 col-span-6 col-start-2">
                 <SelectProject
                   arkivskaper={currentArkivskaper}
                   current={currentProject}
@@ -112,7 +131,7 @@ const Home = () => {
                   updateProject={updateProject}
                 />
               </div>
-              <div className="col-start-2 col-span-6">
+              <div className="step-8 col-span-6 col-start-2">
                 <SelectSeries
                   arkivskaper={currentArkivskaper}
                   project={currentProject}
@@ -122,7 +141,7 @@ const Home = () => {
                   updateSeries={updateSeries}
                 />
               </div>
-              <div className="col-start-2 col-span-6">
+              <div className="step-10 col-span-6 col-start-2">
                 <SelectProtocol
                   series={currentSeries}
                   current={currentProtocol}
@@ -131,10 +150,10 @@ const Home = () => {
                   updateProtocol={updateProtocol}
                 />
               </div>
-              <div className="col-start-2 col-span-6">
+              <div className="step-12 col-span-6 col-start-2">
                 <FolderName current={currentFolder} set={setFolder} />
               </div>
-              <div className="col-start-2 col-span-6">
+              <div className="step-12 step-13 col-span-6 col-start-2">
                 <Capture
                   setImage={setImage}
                   currentImage={currentImage}

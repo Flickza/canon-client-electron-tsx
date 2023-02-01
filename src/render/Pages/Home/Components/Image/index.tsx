@@ -2,9 +2,10 @@ import Viewer from "react-viewer";
 const Image = ({ src }: { src: string }): JSX.Element => {
   const viewer = document.getElementById("imageViewer") as HTMLElement;
   return (
-    <div id="imageViewer" className="container">
+    <div id="imageViewer" className="container step-14">
       <Viewer
         container={viewer}
+        disableKeyboardSupport={true}
         className="inline-container min-h-screen"
         visible={true}
         noClose

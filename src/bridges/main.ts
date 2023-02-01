@@ -46,9 +46,9 @@ export const electronBridge = {
   captureImage: async (
     p: string,
     protocol: Protocol | undefined
-  ): Promise<string> => {
+  ): Promise<response> => {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-    const result: string = await ipcRenderer.invoke(
+    const result: response = await ipcRenderer.invoke(
       "capture-image",
       p,
       protocol
