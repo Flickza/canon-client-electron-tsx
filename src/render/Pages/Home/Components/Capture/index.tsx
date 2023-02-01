@@ -47,6 +47,7 @@ const Capture = ({
         currentFolder.fullPath,
         currentProtocol
       ); // send signal to capture image to path
+      console.log(capture);
       if (capture.statusCode !== 200) {
         // check if capture failed
         return toast.error(capture.message, {
@@ -58,7 +59,7 @@ const Capture = ({
         });
       }
       //check if image is not already set
-      if (capture.file === typeof String && capture.file !== currentImage) {
+      if (capture.file && capture.file !== currentImage) {
         setImage(capture.file); // set image captured
         setShowModal(true); // show save yes/no notification
       }
@@ -67,7 +68,7 @@ const Capture = ({
   return (
     <div className="flex justify-center">
       <button
-        className="btn btn-main border p-2 w-2/4 hover:brightness-125 rounded-b flex justify-center step-11"
+        className="btn btn-main step-11 flex w-2/4 justify-center rounded-b border p-2 hover:brightness-125"
         onClick={handleCapture}
       >
         <span>
@@ -77,7 +78,7 @@ const Capture = ({
             viewBox="0 0 24 24"
             strokeWidth={1}
             stroke="currentColor"
-            className="w-10 h-10"
+            className="h-10 w-10"
           >
             <path
               strokeLinecap="round"
