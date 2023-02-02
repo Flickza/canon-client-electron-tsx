@@ -134,7 +134,6 @@ ipcMain.handle(
           .catch((reason: AxiosError) => {
             writer.end();
             if (checkExists(temp)) removeFile(temp);
-            console.log(reason);
             return handleError(
               reason.status || 500,
               `Could not capture image. \n ${reason.message}`

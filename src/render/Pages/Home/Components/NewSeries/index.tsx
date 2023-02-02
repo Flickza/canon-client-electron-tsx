@@ -24,7 +24,6 @@ const NewSeries = ({
       arkivskaper?.id !== undefined &&
       project?.id !== undefined
     ) {
-      console.log(`/arkivserie/${arkivskaper?.id}/${project?.id}/${input}`);
       await toast
         .promise(
           apiRequest(

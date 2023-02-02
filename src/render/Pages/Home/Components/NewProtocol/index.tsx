@@ -18,7 +18,6 @@ const NewProtocol = ({
 
   const createProtocol = async () => {
     if (input.length > 0 && series?.id !== undefined) {
-      console.log(`/protokoll/${series?.id}/${input}`);
       await toast
         .promise(apiRequest("post", `/protocol/${series?.id}/${input}`), {
           pending: `Opretter ny protokoll: ${input}.`,
@@ -45,11 +44,11 @@ const NewProtocol = ({
       <span className="flex gap-3">
         <input
           type="text"
-          className="form-control border w-5/6"
+          className="form-control w-5/6 border"
           onChange={handleChange}
           value={input}
         />
-        <button className="btn btn-main border w-1/6" onClick={createProtocol}>
+        <button className="btn btn-main w-1/6 border" onClick={createProtocol}>
           <span className="flex justify-center">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -57,7 +56,7 @@ const NewProtocol = ({
               viewBox="0 0 24 24"
               strokeWidth={2}
               stroke="currentColor"
-              className="w-6 h-6"
+              className="h-6 w-6"
             >
               <path
                 strokeLinecap="round"

@@ -4,7 +4,6 @@ import { toast, ToastOptions } from "react-toastify";
 import { apiRequest } from "@/render/utils/api";
 import { toastOptionsTop } from "@/render/utils/toast";
 import NewArkivskaper from "../NewArkivskaper";
-import addIcon from "../../../../../../assets/icons/add.svg";
 import Add from "../Add";
 
 const SelectArkivskaper = ({
@@ -76,24 +75,19 @@ const SelectArkivskaper = ({
       <p>Velg arkivskaper:</p>
       <span className="flex gap-3">
         <select
-          className="form-select select-arrow-down focus:select-arrow-up border w-11/12"
+          className="form-select select-arrow-down focus:select-arrow-up w-11/12 border"
           onChange={handleChange}
           value={current?.name}
         >
           {Arkivskapere?.map((a?) => {
             return (
-              <option
-                className="form-select"
-                key={a?.id}
-                id={a?.id}
-                value={a?.navn}
-              >
+              <option key={a?.id} id={a?.id} value={a?.navn}>
                 {a?.navn}
               </option>
             );
           })}
         </select>
-        <button className="btn btn-main border w-1/12 step-5" onClick={toggle}>
+        <button className="btn btn-main step-5 w-1/12 border" onClick={toggle}>
           <Add />
         </button>
       </span>

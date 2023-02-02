@@ -9,6 +9,7 @@ const Save = ({
   path,
   prefix,
   setImage,
+  setCaptureDisabled,
 }: {
   id: string | undefined;
   showModal: boolean;
@@ -16,6 +17,7 @@ const Save = ({
   path: folderObject;
   prefix: string | undefined;
   setImage: React.Dispatch<React.SetStateAction<string>>;
+  setCaptureDisabled: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
   const showSaveOptions = (
     showModal: boolean,
@@ -26,7 +28,13 @@ const Save = ({
     {
       if (showModal === true && path && prefix) {
         toast(
-          <SaveToast id={id} path={path} prefix={prefix} setImage={setImage} />,
+          <SaveToast
+            id={id}
+            path={path}
+            prefix={prefix}
+            setImage={setImage}
+            setCaptureDisabled={setCaptureDisabled}
+          />,
           {
             position: "bottom-left",
             autoClose: false,

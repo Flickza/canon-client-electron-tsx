@@ -8,6 +8,8 @@ const Capture = ({
   currentFolder,
   currentProtocol,
   prefix,
+  setCaptureDisabled,
+  captureDisabled,
 }: {
   setImage: React.Dispatch<React.SetStateAction<string>>;
   currentImage: string;
@@ -15,6 +17,8 @@ const Capture = ({
   currentFolder: folderObject;
   currentProtocol: Protocol | undefined;
   prefix: string | undefined;
+  setCaptureDisabled: React.Dispatch<React.SetStateAction<boolean>>;
+  captureDisabled: boolean;
 }) => {
   // handle capture button click
   const handleCapture = async () => {
@@ -40,14 +44,25 @@ const Capture = ({
         theme: "light",
       });
     }
+    if (captureDisabled === true) {
+      return toast.error(
+        "Behandle bildet du allerede har tatt før du trykker igjen.",
+        {
+          toastId: "capture",
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          theme: "light",
+        }
+      );
+    }
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-    if (currentFolder.fullPath) {
+    if (currentFolder.fullPath && captureDisabled === false) {
       // check if path is set
       const capture: response = await window.electron.captureImage(
         currentFolder.fullPath,
         currentProtocol
       ); // send signal to capture image to path
-      console.log(capture);
       if (capture.statusCode !== 200) {
         // check if capture failed
         return toast.error(capture.message, {
@@ -61,6 +76,7 @@ const Capture = ({
       //check if image is not already set
       if (capture.file && capture.file !== currentImage) {
         setImage(capture.file); // set image captured
+        setCaptureDisabled(true);
         setShowModal(true); // show save yes/no notification
       }
     }

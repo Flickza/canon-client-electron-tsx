@@ -34,6 +34,7 @@ const Home = () => {
   const [updateProtocol, setUpdateProtocol] = React.useState<boolean>(false);
   const { setIsOpen } = useTour();
 
+  const [captureDisabled, setCaptureDisabled] = React.useState<boolean>(false);
   const [showModal, setShowModal] = React.useState(false);
   const [prefix, setPrefix] = React.useState<string | undefined>();
 
@@ -104,6 +105,7 @@ const Home = () => {
                   setShowModal={setShowModal}
                   path={currentFolder}
                   prefix={prefix}
+                  setCaptureDisabled={setCaptureDisabled}
                 />
               </div>
               <div className="col-span-6 col-start-2 flex justify-end">
@@ -161,6 +163,8 @@ const Home = () => {
                   currentFolder={currentFolder}
                   currentProtocol={currentProtocol}
                   prefix={prefix}
+                  captureDisabled={captureDisabled}
+                  setCaptureDisabled={setCaptureDisabled}
                 />
               </div>
             </div>
