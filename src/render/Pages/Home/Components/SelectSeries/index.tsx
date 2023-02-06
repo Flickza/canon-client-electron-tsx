@@ -57,10 +57,8 @@ const SelectSeries = ({
     });
   }, [project, updateSeries]);
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const index = e.target.selectedIndex;
-    const el = e.target.children[index];
-    const id = el.getAttribute("id");
-    const value = el.getAttribute("value");
+    const id = e.target.value;
+    const value = e.target.selectedOptions[0].dataset.name;
     if (id && value) {
       set({
         id: Number(id),
@@ -90,20 +88,25 @@ const SelectSeries = ({
       <p>Velg Arkivserie:</p>
       <span className="flex gap-3">
         <select
-          className="form-select select-arrow-down border w-11/12"
+          className="form-select select-arrow-down w-11/12 border"
           onChange={handleChange}
-          value={current ? current?.navn : ""}
+          value={current ? current?.id : ""}
           disabled={project?.id === undefined}
         >
           {series?.map((a?) => {
             return (
-              <option className="form-select" key={a?.navn} value={a?.id}>
+              <option
+                className="form-select"
+                key={a?.id}
+                value={a?.id}
+                data-name={a?.navn}
+              >
                 {a?.navn}
               </option>
             );
           })}
         </select>
-        <button className="btn btn-main border w-1/12 step-9" onClick={toggle}>
+        <button className="btn btn-main step-9 w-1/12 border" onClick={toggle}>
           <Add />
         </button>
       </span>

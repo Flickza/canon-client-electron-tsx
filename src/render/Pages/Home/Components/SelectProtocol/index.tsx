@@ -53,10 +53,8 @@ const SelectProtocol = ({
   }, [series, updateProtocol]);
 
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const index = e.target.selectedIndex;
-    const el = e.target.children[index];
-    const id = el.getAttribute("id");
-    const value = el.getAttribute("value");
+    const id = e.target.value;
+    const value = e.target.selectedOptions[0].dataset.name;
     if (id && value) {
       set({
         id: Number(id),
@@ -83,21 +81,26 @@ const SelectProtocol = ({
       <p>Velg Protokoll:</p>
       <span className="flex gap-3">
         <select
-          className="form-select select-arrow-down border w-11/12"
+          className="form-select select-arrow-down w-11/12 border"
           onChange={handleChange}
-          value={protocol ? current?.navn : ""}
+          value={protocol ? current?.id : ""}
           disabled={series?.id === undefined}
         >
           {protocol?.map((a?) => {
             return (
-              <option className="form-select" key={a?.navn} value={a?.id}>
+              <option
+                className="form-select"
+                key={a?.id}
+                value={a?.id}
+                data-name={a?.navn}
+              >
                 {a?.navn}
               </option>
             );
           })}
         </select>
         <button
-          className="btn btn-main border w-1/12 step-10-1"
+          className="btn btn-main step-10-1 w-1/12 border"
           onClick={toggle}
         >
           <Add />
