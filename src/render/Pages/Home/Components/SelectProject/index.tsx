@@ -97,7 +97,7 @@ const SelectProject = ({
       <p>Velg prosjekt:</p>
       <span className="flex gap-3">
         <select
-          className="form-select select-arrow-down border w-11/12"
+          className="form-select select-arrow-down border w-11/12 "
           onChange={handleChange}
           value={current?.navn}
           disabled={arkivskaper?.id === undefined}

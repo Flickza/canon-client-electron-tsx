@@ -1,7 +1,7 @@
 {
   "name": "canon-api-web-tsx",
   "productName": "muggprosjekt",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "Muggprosjekt electron build",
   "main": ".webpack/main",
   "scripts": {
